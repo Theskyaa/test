@@ -41,18 +41,27 @@ public class MainController {
 
     }*/
 
-    @RequestMapping(value = "/borrowbook",method = RequestMethod.GET)
+    /*@RequestMapping(value = "/borrowbook",method = RequestMethod.GET)
     public String borrowbook1(Model model){
         List<Book> booklist=bookRepository.listAll();
         model.addAttribute("list2",booklist);
         return "borrow";
-    }
+    }*/
 
-    @RequestMapping(value = "/returnbook1",method = RequestMethod.GET)
+    /*@RequestMapping(value = "/returnbook1",method = RequestMethod.GET)
     public String returnbook1(Model model){
         List<Book> bookList=bookRepository.listBorrowedBook();
         model.addAttribute("list3",bookList);
         return "return";
-    }
+    }*/
+
+
+    /*@ResponseBody
+    @RequestMapping(value = "/borrowbook1",method = RequestMethod.POST)
+    public boolean borrowbook1(@RequestParam("id")String id){
+
+        System.out.println(id);
+        return true;
+    }*/
 
 }

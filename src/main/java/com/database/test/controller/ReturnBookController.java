@@ -7,8 +7,11 @@ import com.database.test.repository.ReturnRecordsRepository;
 import com.database.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -26,6 +29,25 @@ public class ReturnBookController {
 
     @Autowired
     ReturnRecordsRepository returnRecordsRepository;
+
+
+    @RequestMapping(value = "/returnBook",method = RequestMethod.GET)
+    public String returnBook(Model model,
+                             HttpSession session){
+        String email= (String) session.getAttribute("currentEmail");
+        List<Book> bookList=bookRepository.listBorrowedBookByEmail(email);
+        model.addAttribute("borrowedBookList",bookList);
+        return "return";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/returnBookSuccess",method = RequestMethod.POST)
+    public boolean returnBookSuccess(@RequestParam("bookId") Integer bookId,
+                                     HttpSession session){
+        int result=bookRepository.resetBookReading(bookId);
+        System.out.println(result);
+        return true;
+    }
 
     /*@ResponseBody
     @RequestMapping(value = "/returnbook",method = RequestMethod.POST)
@@ -47,7 +69,7 @@ public class ReturnBookController {
         borrowRecordsRepository.save(borrowRecords);
         return true;
     }
-*/
+*//*
     @ResponseBody
     @RequestMapping(value = "/returnbook",method = RequestMethod.POST)
     public boolean returnbook(@RequestBody Map<String,Object> map) {
@@ -101,7 +123,7 @@ public class ReturnBookController {
         return borrowRecordsRepository.selectRecordByEmail(email);
     }
 
-    /*@ResponseBody
+    *//*@ResponseBody
     @RequestMapping(value = "/returnBook",method = RequestMethod.POST)
     public boolean returnBook(@RequestParam("bookName")String bookName,
                               @RequestParam("email")String email) {
@@ -113,9 +135,9 @@ public class ReturnBookController {
 
         return true;
 
-    }*/
+    }*//*
 
-    /*@ResponseBody
+    *//*@ResponseBody
     @RequestMapping(value = "/returnBookRecords",method = RequestMethod.POST)
     public List<Object> returnBookRecords(@RequestParam("email")String email){
         return borrowRecordsRepository.selectBorrowRecords(email);

@@ -13,6 +13,37 @@
   <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
   <![endif]-->
+
+  <script type="text/javascript">
+    window.onload=function () {
+      var all = document.getElementsByTagName("button");
+      var id
+      for (var i = 0; i < all.length; i++) {
+        all[i].onclick = function () {
+          var t = this.parentNode.parentNode;
+          id = t.cells[0].innerText;
+
+          var r = confirm("Are you sure to return this book？");
+          if (r == true) {
+            $.ajax({
+              type: "POST",
+              url: '/borrowBook',
+              data: {"bookId":id},
+              dataType: "json",
+              success: function(result) {
+                alert('Return Successful!');
+                location.reload();
+                window.parent.closeDialog('editUser');
+              }
+            });
+          }
+        }
+      }
+    }
+
+  </script>
+
+
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -25,7 +56,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="/mainMenu">Library</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -46,14 +77,14 @@
           </ul>
         </li>
       </ul>
-      <form class="navbar-form navbar-left">
+      <form class="navbar-form navbar-left" action="/search" method="post">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text" class="form-control" name="searchMessage" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+        <button type="submit" class="btn btn-default">Search</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+        <li><a href="#" th:text="${session.currentEmail}">未登录</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -75,13 +106,13 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="/borrowbook">
+            <a class="nav-link active" href="/listBook">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
               借书 <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/returnbook1">
+            <a class="nav-link" href="/returnBook">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
               还书
             </a>
@@ -159,19 +190,19 @@
             <th>book_name</th>
             <th>book_author</th>
             <th>book_owner</th>
-            <th>book_currentReading</th>
-            <th>borrow_books</th>
+            <th>book_introduction</th>
+            <th>book_detail</th>
           </tr>
           </thead>
 
           <tbody>
-            <tr th:each="list : ${list3}">
+            <tr th:each="list : ${borrowedBookList}">
               <td th:text="${list.getBookId()}"></td>
               <td th:text="${list.getBookName()}"></td>
-              <!--<td><a href="#" th:text="${list.getBookName()}">Title</a></td>-->
               <td th:text="${list.getBookAuthor()}">null</td>
               <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookCurrentReading()}">null</td>
+              <td th:text="${list.getBookIntroduction()}">null</td>
+              <td><a href="#">Detail</a></td>
               <td><button class="btn btn-lg btn-primary btn-block" onclick="" type="submit">return</button></td>
             </tr>
           </tbody>

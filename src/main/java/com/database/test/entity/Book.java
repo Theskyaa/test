@@ -31,8 +31,8 @@ public class Book {
     @Column(name = "book_score")
     private Integer bookScore;
 
-    @Column(name = "house_id")
-    private Integer houseId;
+    @Column(name = "book_publishinghouse")
+    private String bookPublishingHouse;
 
     public String getBookId() {
         return bookId;
@@ -82,14 +82,6 @@ public class Book {
         this.bookIntroduction = bookIntroduction;
     }
 
-    public Integer getHouseId() {
-        return houseId;
-    }
-
-    public void setHouseId(Integer houseId) {
-        this.houseId = houseId;
-    }
-
     public Integer getBookScore() {
         return bookScore;
     }
@@ -98,4 +90,11 @@ public class Book {
         this.bookScore = bookScore;
     }
 
+    public String getBookPublishingHouse() {
+        return bookPublishingHouse;
+    }
+
+    public void setBookPublishingHouse(String bookPublishingHouse) {
+        this.bookPublishingHouse = bookPublishingHouse;
+    }
 }

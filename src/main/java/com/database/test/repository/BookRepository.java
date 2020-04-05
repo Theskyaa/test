@@ -12,7 +12,55 @@ import java.util.Map;
 
 public interface BookRepository extends JpaRepository<Book,String> {
 
-    List<Book> findByBookName(String bookName);
+
+    @Query(nativeQuery = true,value = "select * from book")
+    List<Book> listAll();
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update book set book_reading=?2 where book_id=?1")
+    int updateBookReadingByBookId(Integer bookId,String bookReadingEmail);
+
+
+    @Query(nativeQuery = true,value = "select * from book where book_reading='null'")
+    List<Book> listNotBorrowedBook();
+
+    @Query(nativeQuery = true,value = "select * from book where book_reading=?1")
+    List<Book> listBorrowedBookByEmail(String email);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update book set book_reading='null' where book_id=?1")
+    int resetBookReading(Integer bookId);
+
+
+    /*@Query(nativeQuery = true,value = "select * from book where book_name like ")
+    List<Book> searchByBookName(String bookName);
+
+    @Query(nativeQuery = true,value = "select * from book where book_author like '%'+?1+'%'")
+    List<Book> searchByBookAuthor(String bookAuthor);*/
+
+    List<Book> findByBookNameLike(String bookName);
+
+    List<Book> findByBookAuthorLike(String bookAuthor);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Transactional
     @Modifying
@@ -43,17 +91,10 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(value = "select * from book where book_id=?1",nativeQuery = true)
     List<Book> listByBookId(String bookId);
 
-    @Query(value = "select * from book",nativeQuery = true)
-    List<Book> listAll();
-
     @Query(nativeQuery = true,value =
             "select book.book_name,borrowrecord.borrow_time,return_time" +
             " from borrowrecord,returnrecord,book " +
             "where borrowrecord.borrow_id=returnrecord.borrow_id and borrowrecord.book_id=book.book_id and borrowrecord.email=?1")
     List<Map<String,Object>> selectBorrowAndReturnRecords(String email);
-
-
-    @Query(nativeQuery = true,value = "select * from book where book_reading<>'null' ")
-    List<Book> listBorrowedBook();
 
 }

@@ -5,12 +5,15 @@ import com.database.test.repository.BorrowRecordsRepository;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.util.List;
 
 @Controller
@@ -18,25 +21,76 @@ public class SignAndLoginController {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    BookRepository bookRepository;
-    @Autowired
-    BorrowRecordsRepository borrowingRecordsRepository;
+
+
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String login(){
+        return "login";
+    }
+
+    @RequestMapping(value = "/register",method = RequestMethod.GET)
+    public String register(){
+        return "register";
+    }
+
+
+    @RequestMapping(value = "/mainMenu",method = RequestMethod.GET)
+    public String mainMenu(){
+        return "mainMenu";
+    }
+
+    @RequestMapping(value = "/loginSuccess",method = RequestMethod.POST)
+    public String loginSuccess(@RequestParam("email")String email,
+                               @RequestParam("password")String password,
+                               Model model,
+                               HttpSession session
+                               /*HttpServletRequest request,
+                               HttpServletResponse response*/){
+        List<User> users=userRepository.selectByEmail(email);
+        if (users.size()==0){
+            return "redirect:/login";
+        }else {
+            if (users.get(0).getPassword().equals(password)){
+                //request.getSession().setAttribute("email",email);
+                session.setAttribute("currentEmail",email);
+                session.setAttribute("currentUsername",users.get(0).getUsername());
+                //model.addAttribute("email",email);
+                //return "mainMenu";
+                return "redirect:/mainMenu";
+            }
+        }
+        return "redirect:/login";
+    }
+
+
+
+    @RequestMapping(value = "/registerSuccess",method = RequestMethod.POST)
+    public String register(@RequestParam("email")String email,
+                           @RequestParam("password")String password,
+                           @RequestParam("username")String username){
+
+        List<User> users=userRepository.selectByEmail(email);
+        if (users.size()==0){
+            System.out.println(email);
+            System.out.println(password);
+            System.out.println(username);
+            userRepository.insertUser(email,username,password);
+            return "redirect:/login";
+        }else {
+            return "register";
+        }
+    }
+
+
+
+
 
     /*@ResponseBody
-    @RequestMapping(value = "/listAll",method = RequestMethod.GET)
-    public List<Book> Login2(){
-        //System.out.println(libraryItemRepository.listAll());
-        List<Book> books =bookRepository.listAll();
-        return books;
-    }*/
-
-    @ResponseBody
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public boolean signup(@RequestParam("email")String email,
                           @RequestParam("password")String password,
                           @RequestParam("username")String username){
-        List<User> list=userRepository.findByEmail(email);
+        List<User> list=userRepository.selectByEmail(email);
         if (list.isEmpty()){
             User newUser=new User();
             newUser.setEmail(email);
@@ -67,52 +121,7 @@ public class SignAndLoginController {
             }
             return false;
         }
-    }
-
-
-
-
-
-   /* @RequestMapping(value = "/",method = RequestMethod.GET)
-    public String Login1(Model model){
-        List<Book> listAll=bookRepository.listAll();
-        model.addAttribute("list1", listAll);
-        return "Login.html";
-    }
-
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(){
-        return "login.html";
-    }
-
-    @RequestMapping(value = "/sign",method = RequestMethod.GET)
-    public String sign(){
-        return "signup.html";
-    }
-
-
-    @RequestMapping(value = "/success",method = RequestMethod.POST)
-    public String login_success(@RequestParam("email")String email,
-                                @RequestParam("password")String password,
-                                Model model){
-
-        List<User> list=userRepository.findByEmail(email);
-        List<Book> listAll=bookRepository.listAll();
-        model.addAttribute("list1", listAll);
-
-        if (list.isEmpty()){
-            System.out.println("null");
-            return "login.html";
-        }else{
-            if (list.get(0).getPassword().equals(password)){
-
-                return "Dashboard.html";
-            }else {
-                System.out.println("password error");
-                return "login.html";
-            }
-        }
-
     }*/
+
 
 }
