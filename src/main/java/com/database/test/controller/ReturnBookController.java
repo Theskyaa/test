@@ -36,6 +36,11 @@ public class ReturnBookController {
                              HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         List<Book> bookList=bookRepository.listBorrowedBookByEmail(email);
+        for (int i=0;i<bookList.size();i++){
+            if (bookList.get(i).getBookIntroduction().length()>20){
+                bookList.get(i).setBookIntroduction(bookList.get(i).getBookIntroduction().substring(0,20));
+            }
+        }
         model.addAttribute("borrowedBookList",bookList);
         return "return";
     }
@@ -44,6 +49,7 @@ public class ReturnBookController {
     @RequestMapping(value = "/returnBookSuccess",method = RequestMethod.POST)
     public boolean returnBookSuccess(@RequestParam("bookId") Integer bookId,
                                      HttpSession session){
+        System.out.println("bookid:"+bookId);
         int result=bookRepository.resetBookReading(bookId);
         System.out.println(result);
         return true;

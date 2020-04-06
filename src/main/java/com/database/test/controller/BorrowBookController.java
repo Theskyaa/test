@@ -32,6 +32,13 @@ public class BorrowBookController {
                            HttpSession session){
         //List<Book> bookList=bookRepository.listAll();
         List<Book> bookList=bookRepository.listNotBorrowedBook();
+
+        for (int i=0;i<bookList.size();i++){
+            Book book=bookList.get(i);
+            if (book.getBookIntroduction().length()>20){
+                book.setBookIntroduction(book.getBookIntroduction().substring(0,20));
+            }
+        }
         System.out.println(session.getAttribute("currentEmail"));
         model.addAttribute("list",bookList);
         return "borrow";
@@ -39,7 +46,7 @@ public class BorrowBookController {
 
 
     @ResponseBody
-    @RequestMapping(value = "borrowBook",method = RequestMethod.POST)
+    @RequestMapping(value = "/borrowBook",method = RequestMethod.POST)
     public boolean borrowBook(@RequestParam("bookId")Integer bookId,
                               HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
