@@ -39,6 +39,11 @@ public class SignAndLoginController {
         return "mainMenu";
     }
 
+    @RequestMapping(value = "/groupMenu",method = RequestMethod.GET)
+    public String groupMenu(){
+        return "groupMenu";
+    }
+
     @RequestMapping(value = "/loginSuccess",method = RequestMethod.POST)
     public String loginSuccess(@RequestParam("email")String email,
                                @RequestParam("password")String password,
@@ -56,7 +61,8 @@ public class SignAndLoginController {
                 session.setAttribute("currentUsername",users.get(0).getUsername());
                 //model.addAttribute("email",email);
                 //return "mainMenu";
-                return "redirect:/mainMenu";
+                System.out.println("success");
+                return "redirect:/groupMenu";
             }
         }
         return "redirect:/login";

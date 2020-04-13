@@ -35,7 +35,8 @@ public class ReturnBookController {
     public String returnBook(Model model,
                              HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
-        List<Book> bookList=bookRepository.listBorrowedBookByEmail(email);
+        Integer groupId= (Integer) session.getAttribute("currentGroupId");
+        List<Book> bookList=bookRepository.listBorrowedBookByEmailAndGroupId(groupId,email);
         for (int i=0;i<bookList.size();i++){
             if (bookList.get(i).getBookIntroduction().length()>20){
                 bookList.get(i).setBookIntroduction(bookList.get(i).getBookIntroduction().substring(0,20));

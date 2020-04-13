@@ -23,11 +23,11 @@ public interface BookRepository extends JpaRepository<Book,String> {
     int updateBookReadingByBookId(Integer bookId,String bookReadingEmail);
 
 
-    @Query(nativeQuery = true,value = "select * from book where book_reading='null'")
-    List<Book> listNotBorrowedBook();
+    @Query(nativeQuery = true,value = "select book.book_id,book_name,book_author,book_owner,book_reading,book_publishinghouse,book_score,book_introduction from book,bookbelong where bookbelong.group_id=?1 and bookbelong.book_id=book.book_id and book_reading='null'")
+    List<Book> listNotBorrowedBookByGroupId(Integer groupId);
 
-    @Query(nativeQuery = true,value = "select * from book where book_reading=?1")
-    List<Book> listBorrowedBookByEmail(String email);
+    @Query(nativeQuery = true,value = "select book.book_id,book_name,book_author,book_owner,book_reading,book_publishinghouse,book_score,book_introduction from book,bookbelong where group_id=?1 and book_reading=?2 and bookbelong.book_id=book.book_id")
+    List<Book> listBorrowedBookByEmailAndGroupId(Integer groupId,String email);
 
     @Transactional
     @Modifying

@@ -31,7 +31,8 @@ public class BorrowBookController {
     public String listBook(Model model,
                            HttpSession session){
         //List<Book> bookList=bookRepository.listAll();
-        List<Book> bookList=bookRepository.listNotBorrowedBook();
+        Integer groupId= (Integer) session.getAttribute("currentGroupId");
+        List<Book> bookList=bookRepository.listNotBorrowedBookByGroupId(groupId);
 
         for (int i=0;i<bookList.size();i++){
             Book book=bookList.get(i);
