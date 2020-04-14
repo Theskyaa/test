@@ -21,11 +21,28 @@ public class GroupController {
     GroupRepository groupRepository;
 
 
-    @RequestMapping(value = "/groupJoinIn",method = RequestMethod.POST)
-    public String groupJoinIn(){
+    @RequestMapping(value = "/groupJoinIn",method = RequestMethod.GET)
+    public String groupJoinIn(HttpSession session,
+                              Model model){
+        String email= (String) session.getAttribute("currentEmail");
+        List<GroupList> groupLists=groupRepository.selectNotJoinInGroupByEmial(email);
+        model.addAttribute("groupList",groupLists);
 
+        for (int i=0;i<groupLists.size();i++){
+            System.out.println(groupLists.get(i).getGroupId());
+            System.out.println(groupLists.get(i).getGroupName());
+        }
+        return "group/groupJoinInPage.html";
+    }
 
-        return "group/groupJoinInPage";
+    @ResponseBody
+    @RequestMapping(value = "/groupJoinInSuccess",method = RequestMethod.POST)
+    public boolean groupJoinInSuccess(@RequestParam("groupId")Integer groupId,
+                                      HttpSession session){
+        String email= (String) session.getAttribute("currentEmail");
+        Integer result=groupRepository.insertUserBelong(email,groupId);
+        System.out.println("insert result:"+result);
+        return true;
     }
 
 
@@ -49,4 +66,6 @@ public class GroupController {
         System.out.println(groupId);
         return true;
     }
+
+
 }
