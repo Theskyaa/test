@@ -22,6 +22,12 @@ public class GroupList {
     @Column(name = "group_foundingtime")
     private String groupFoundingTime;
 
+    @Column(name = "group_introduction")
+    private String groupIntroduction;
+
+    @Column(name = "group_number")
+    private Integer groupNumber;
+
     public Integer getGroupId() {
         return groupId;
     }
@@ -52,5 +58,21 @@ public class GroupList {
 
     public void setGroupFoundingTime(String groupFoundingTime) {
         this.groupFoundingTime = groupFoundingTime;
+    }
+
+    public String getGroupIntroduction() {
+        return groupIntroduction;
+    }
+
+    public void setGroupIntroduction(String groupIntroduction) {
+        this.groupIntroduction = groupIntroduction;
+    }
+
+    public Integer getGroupNumber() {
+        return groupNumber;
+    }
+
+    public void setGroupNumber(Integer groupNumber) {
+        this.groupNumber = groupNumber;
     }
 }

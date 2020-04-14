@@ -12,8 +12,8 @@ import java.util.List;
 public interface GroupRepository extends JpaRepository<GroupList,Integer> {
 
 
-    @Query(nativeQuery = true,value = "select grouplist.group_id,group_name,group_founder,group_foundingtime from groupList,userbelong where grouplist.group_id=userbelong.group_id and userbelong.email=?1")
-    List<GroupList> selectJoinInGroupName(String email);
+    @Query(nativeQuery = true,value = "select grouplist.group_id,group_name,group_founder,group_foundingtime,group_introduction,group_number from groupList,userbelong where grouplist.group_id=userbelong.group_id and userbelong.email=?1")
+    List<GroupList> selectJoinInGroup(String email);
 
 
     @Query(nativeQuery = true,value = "select * from grouplist where group_id=?1")
@@ -27,4 +27,18 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
     @Modifying
     @Query(nativeQuery = true,value = "insert into userbelong (email, group_id) values (?1,?2)")
     int insertUserBelong(String email,Integer groupId);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from userbelong where userbelong.email=?1 and userbelong.group_id=?2")
+    int deleteByGroupIdAndEmail(String email,Integer groupId);
+
+    @Query(nativeQuery = true,value = "select * from grouplist order by group_id desc limit 1")
+    GroupList selectMaxGroupId();
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "insert into grouplist (group_id, group_name, group_founder, group_foundingtime, group_introduction, group_number) values (?1,?2,?3,?4,?5,?6)")
+    int insertGroupListRecord(Integer groupId,String groupName,String email,String time,String introduction,Integer num);
+
 }
