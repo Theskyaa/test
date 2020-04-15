@@ -38,7 +38,14 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
 
     @Transactional
     @Modifying
+    @Query(nativeQuery = true,value = "update grouplist set group_number=?1 where group_id=?1")
+    int updateGroupNumber(Integer num);
+
+    @Transactional
+    @Modifying
     @Query(nativeQuery = true,value = "insert into grouplist (group_id, group_name, group_founder, group_foundingtime, group_introduction, group_number) values (?1,?2,?3,?4,?5,?6)")
     int insertGroupListRecord(Integer groupId,String groupName,String email,String time,String introduction,Integer num);
 
+    @Query(nativeQuery = true,value = "select * from grouplist where group_name like concat('%',?1,'%') and group_id not in (select userbelong.group_id from userbelong where email=?2)")
+    List<GroupList> selectGroupLike(String groupName,String email);
 }

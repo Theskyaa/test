@@ -51,6 +51,8 @@ public class GroupController {
                                       HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         Integer result=groupRepository.insertUserBelong(email,groupId);
+        GroupList currentGroup=groupRepository.selectByGroupId(groupId);
+        int result1=groupRepository.updateGroupNumber(currentGroup.getGroupNumber()+1);
         System.out.println("insert result:"+result);
         return true;
     }
@@ -93,6 +95,8 @@ public class GroupController {
                                       HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         int result=groupRepository.deleteByGroupIdAndEmail(email,groupId);
+        GroupList groupList=groupRepository.selectByGroupId(groupId);
+        int result1=groupRepository.updateGroupNumber(groupList.getGroupNumber()-1);
         System.out.println("delete result: "+result);
         return true;
     }
@@ -117,5 +121,16 @@ public class GroupController {
         int result=groupRepository.insertGroupListRecord(maxId+1,groupName,email,time,groupIntroduction,0);
         System.out.println("create group: "+result);
         return true;
+    }
+
+
+    @RequestMapping(value = "/groupSearch",method = RequestMethod.POST)
+    public String groupSearch(@RequestParam("groupName")String groupName,
+                              HttpSession session,
+                              Model model){
+        String email= (String) session.getAttribute("currentEmail");
+        List<GroupList> groupLists=groupRepository.selectGroupLike(groupName,email);
+        model.addAttribute("groupList",groupLists);
+        return "group/groupJoinInPage.html";
     }
 }
