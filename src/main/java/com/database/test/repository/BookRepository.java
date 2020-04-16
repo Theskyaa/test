@@ -35,6 +35,8 @@ public interface BookRepository extends JpaRepository<Book,String> {
     int resetBookReading(Integer bookId);
 
 
+
+
     /*@Query(nativeQuery = true,value = "select * from book where book_name like ")
     List<Book> searchByBookName(String bookName);
 

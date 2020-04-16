@@ -8,36 +8,27 @@ import javax.persistence.criteria.CriteriaBuilder;
 public class BorrowRecords {
 
     @Id
-    @Column(name = "borrow_id")
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer borrowId;
+    @Column(name = "record_id")
+    private Integer recordId;
 
     @Column(name = "email")
     private String email;
 
     @Column(name = "book_id")
-    private String bookId;
+    private Integer bookId;
 
     @Column(name = "borrow_time")
     private String borrowTime;
 
-    @Column(name = "return_id")
-    private Integer returnId;
+    @Column(name = "return_time")
+    private String returnTime;
 
-    public Integer getReturnId() {
-        return returnId;
+    public Integer getRecordId() {
+        return recordId;
     }
 
-    public void setReturnId(Integer returnId) {
-        this.returnId = returnId;
-    }
-
-    public Integer getBorrowId() {
-        return borrowId;
-    }
-
-    public void setBorrowId(Integer borrowId) {
-        this.borrowId = borrowId;
+    public void setRecordId(Integer recordId) {
+        this.recordId = recordId;
     }
 
     public String getEmail() {
@@ -48,11 +39,11 @@ public class BorrowRecords {
         this.email = email;
     }
 
-    public String getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(String bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
 
@@ -62,5 +53,13 @@ public class BorrowRecords {
 
     public void setBorrowTime(String borrowTime) {
         this.borrowTime = borrowTime;
+    }
+
+    public String getReturnTime() {
+        return returnTime;
+    }
+
+    public void setReturnTime(String returnTime) {
+        this.returnTime = returnTime;
     }
 }

@@ -14,90 +14,6 @@
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
   <![endif]-->
 
-  <script type="text/javascript">
-    window.onload=function () {
-      var all=document.getElementsByTagName("button");
-      var id
-      for (var i=0;i<all.length;i++){
-        all[i].onclick=function () {
-          var t=this.parentNode.parentNode;
-          id=t.cells[0].innerText;
-          //alert(id);
-          var r = confirm("Are you sure to borrow this book？");
-          if (r == true) {
-            //x = "Yes！";
-            $.ajax({
-              type: "POST",
-              url: '/borrowBook',
-              data: {"bookId":id},
-              dataType: "json",
-              success: function(result) {
-                alert('Borrow Successful!');
-                location.reload();
-                window.parent.closeDialog('editUser');
-              }
-            });
-          } else {
-            //x = "No！";
-          }
-
-          /*$.ajax({
-            type: "POST",
-            url: '/borrowBook',
-            data: {"bookId":id},
-            dataType: "json",
-            success: function(result) {
-              alert('保存成功');
-              location.reload();
-              window.parent.closeDialog('editUser');
-            }
-          });*/
-        }
-      }
-
-      /*$.ajax({
-        type: "POST",
-        url: '/borrowbook1',
-        data: JSON.stringify(paramsArr),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(result) {
-          alert('保存成功');
-          window.parent.closeDialog('editUser');
-        }
-      });*/
-
-    }
-
-            /*function saveTableInfo(){
-              var trList = $("#tablelist").children("tbody").children("tr");
-              var paramsArr = new Array();
-              for (var i=0;i<trList.length;i++){
-                params = {};
-                var tdArr = trList.eq(i).find("td");
-                var ID = tdArr.eq(0).find('input').val();//数据列id
-                var PHONENUMBER = tdArr.eq(2).find('input').val();//电话号码
-                params.ID=ID;
-                params.PHONENUMBER=PHONENUMBER;
-                params.ISUSE=ISUSE;
-                paramsArr.push(params);
-              }
-              //alert(JSON.stringify(paramsArr));
-              $.ajax({
-                type: "POST",
-                url: '/borrowbook1',
-                data: JSON.stringify(paramsArr),
-                contentType: "application/json",
-                dataType: "json",
-                success: function(result) {
-                  alert('保存成功');
-                  window.parent.closeDialog('editUser');
-                }
-              });
-            }*/
-
-  </script>
-
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -113,10 +29,11 @@
       <a class="navbar-brand" href="/mainMenu">Library</a>
     </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#" >Link</a></li>
+        <li><a href="#">Link</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -203,27 +120,22 @@
 
       <!--<img src="img/image1.jpg" th:src="@{img/image1.jpg}">-->
       <div class="table-responsive">
-        <table class="table table-striped table-sm" id="tablelist">
+        <table class="table table-striped table-sm">
           <thead>
           <tr>
-            <th>Book_ID</th>
-            <th>Book_Name</th>
-            <th>Book_Author</th>
-            <th>Book_Owner</th>
-            <th>Book_Introduction</th>
-            <th>Book_Detail</th>
+            <th>RecordID</th>
+            <th>BookName</th>
+            <th>BookBorrowTime</th>
+            <th>BookReturnTime</th>
           </tr>
           </thead>
 
-          <tbody id="tablebody">
-            <tr th:each="list : ${list}">
-              <td th:text="${list.getBookId()}"></td>
-              <td th:text="${list.getBookName()}"></td>
-              <td th:text="${list.getBookAuthor()}">null</td>
-              <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookIntroduction()}">null</td>
-              <td><a href="#">Detail</a></td>
-              <td><button class="btn btn-lg btn-primary btn-block" type="submit">borrow</button></td>
+          <tbody>
+            <tr th:each="entity,list : ${borrowRecords}">
+              <td th:text="${entity['record_id']}"></td>
+              <td th:text="${entity['book_name']}"></td>
+              <td th:text="${entity['borrow_time']}"></td>
+              <td th:text="${entity['return_time']}"></td>
             </tr>
           </tbody>
         </table>

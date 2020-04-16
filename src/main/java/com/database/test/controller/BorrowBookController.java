@@ -1,27 +1,24 @@
 package com.database.test.controller;
 
 import com.database.test.entity.Book;
+import com.database.test.entity.BorrowRecords;
 import com.database.test.entity.User;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.BorrowRecordsRepository;
 import com.database.test.repository.UserRepository;
+import com.database.test.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
 public class BorrowBookController {
     @Autowired
     BookRepository bookRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Autowired
     BorrowRecordsRepository borrowRecordsRepository;
@@ -52,61 +49,16 @@ public class BorrowBookController {
                               HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         int result=bookRepository.updateBookReadingByBookId(bookId,email);
-        System.out.println(result);
+        List<BorrowRecords> records=borrowRecordsRepository.selectMaxRecordId();
+
+        //生成借阅record
+        int maxId=0;
+        if (records.size()==0){
+            maxId=0;
+        }else {
+            maxId=records.get(0).getRecordId();
+        }
+        borrowRecordsRepository.insertRecord(maxId+1,email,bookId,new TimeUtil().getCurrentTime(),"null");
         return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //没有界面
-    @ResponseBody
-    @RequestMapping(value = "/listAllBook",method = RequestMethod.POST)
-    public List<Book> listAll(){
-
-        return bookRepository.listAll();
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/listBook",method = RequestMethod.POST)
-    public Map<String, Object> selectBook(){
-        List<Map<String,Object>> resultData=bookRepository.selectAllUsefulMessage();
-        Map<String,Object> resultMap=new HashMap<>();
-        resultMap.put("bookInfo",resultData);
-        return resultMap;
-    }
-
 }
