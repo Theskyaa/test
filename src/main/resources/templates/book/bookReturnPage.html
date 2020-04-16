@@ -16,87 +16,34 @@
 
   <script type="text/javascript">
     window.onload=function () {
-      var all=document.getElementsByTagName("button");
+      var all = document.getElementsByTagName("button");
       var id
-      for (var i=0;i<all.length;i++){
-        all[i].onclick=function () {
-          var t=this.parentNode.parentNode;
-          id=t.cells[0].innerText;
+      for (var i = 0; i < all.length; i++) {
+        all[i].onclick = function () {
+          var t = this.parentNode.parentNode;
+          id = t.cells[0].innerText;
           //alert(id);
-          var r = confirm("Are you sure to borrow this book？");
+
+          var r = confirm("Are you sure to return this book？");
           if (r == true) {
-            //x = "Yes！";
             $.ajax({
               type: "POST",
-              url: '/borrowBook',
+              url: '/returnBookSuccess',
               data: {"bookId":id},
               dataType: "json",
               success: function(result) {
-                alert('Borrow Successful!');
+                alert('Return Successful!');
                 location.reload();
                 window.parent.closeDialog('editUser');
               }
             });
-          } else {
-            //x = "No！";
           }
-
-          /*$.ajax({
-            type: "POST",
-            url: '/borrowBook',
-            data: {"bookId":id},
-            dataType: "json",
-            success: function(result) {
-              alert('保存成功');
-              location.reload();
-              window.parent.closeDialog('editUser');
-            }
-          });*/
         }
       }
-
-      /*$.ajax({
-        type: "POST",
-        url: '/borrowbook1',
-        data: JSON.stringify(paramsArr),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(result) {
-          alert('保存成功');
-          window.parent.closeDialog('editUser');
-        }
-      });*/
-
     }
 
-            /*function saveTableInfo(){
-              var trList = $("#tablelist").children("tbody").children("tr");
-              var paramsArr = new Array();
-              for (var i=0;i<trList.length;i++){
-                params = {};
-                var tdArr = trList.eq(i).find("td");
-                var ID = tdArr.eq(0).find('input').val();//数据列id
-                var PHONENUMBER = tdArr.eq(2).find('input').val();//电话号码
-                params.ID=ID;
-                params.PHONENUMBER=PHONENUMBER;
-                params.ISUSE=ISUSE;
-                paramsArr.push(params);
-              }
-              //alert(JSON.stringify(paramsArr));
-              $.ajax({
-                type: "POST",
-                url: '/borrowbook1',
-                data: JSON.stringify(paramsArr),
-                contentType: "application/json",
-                dataType: "json",
-                success: function(result) {
-                  alert('保存成功');
-                  window.parent.closeDialog('editUser');
-                }
-              });
-            }*/
-
   </script>
+
 
 </head>
 <body>
@@ -110,25 +57,14 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/mainMenu">Library</a>
+      <a class="navbar-brand" href="#">Library</a>
     </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
         <li><a href="#" >Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
       </ul>
       <form class="navbar-form navbar-left" action="/search" method="post">
         <div class="form-group">
@@ -137,22 +73,21 @@
         <button type="submit" class="btn btn-default">Search</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" th:text="${session.currentEmail}">未登录</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GroupManage<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li><a href="/groupEntry">小组选择</a></li>
+            <li><a href="/groupJoinIn">小组加入</a></li>
+            <li><a href="/groupCreate">小组创建</a></li>
+            <li><a href="/groupManage">小组管理</a></li>
           </ul>
         </li>
+        <li><a href="#" th:text="${session.currentEmail}">未登录</a></li>
+        <li><a href="/login">Drop Out</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
 <div class="container-fluid">
   <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
@@ -183,15 +118,21 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://getbootstrap.com/docs/4.1/examples/dashboard/#">
+            <a class="nav-link" href="/bookManage">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-              管理
+              管理书籍
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bookUpload">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              上传书籍
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://getbootstrap.com/docs/4.1/examples/dashboard/#">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              分享
+              兴趣分享
             </a>
           </li>
         </ul>
@@ -203,7 +144,7 @@
 
       <!--<img src="img/image1.jpg" th:src="@{img/image1.jpg}">-->
       <div class="table-responsive">
-        <table class="table table-striped table-sm" id="tablelist">
+        <table class="table table-striped table-sm">
           <thead>
           <tr>
             <th>Book_ID</th>
@@ -215,15 +156,15 @@
           </tr>
           </thead>
 
-          <tbody id="tablebody">
-            <tr th:each="list : ${list}">
+          <tbody>
+            <tr th:each="list : ${borrowedBookList}">
               <td th:text="${list.getBookId()}"></td>
               <td th:text="${list.getBookName()}"></td>
-              <td th:text="${list.getBookAuthor()}">null</td>
-              <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookIntroduction()}">null</td>
+              <td th:text="${list.getBookAuthor()}"></td>
+              <td th:text="${list.getBookOwner()}"></td>
+              <td th:text="${list.getBookIntroduction()}"></td>
               <td><a href="#">Detail</a></td>
-              <td><button class="btn btn-lg btn-primary btn-block" type="submit">borrow</button></td>
+              <td><button class="btn btn-lg btn-primary btn-block" onclick="" type="submit">return</button></td>
             </tr>
           </tbody>
         </table>

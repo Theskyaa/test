@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class BookReviewController {
 
-    @Autowired
+    /*@Autowired
     BookReviewRepository bookReviewRepository;
 
     @Autowired
@@ -38,10 +38,10 @@ public class BookReviewController {
         }
 
         return false;
-    }
+    }*/
 
 
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/listCommentsByBookName",method = RequestMethod.POST)
     public List<Object> listCommentsByBookName(@RequestParam("bookName")String bookName){
         //return bookReviewRepository.selectBookReviewByBookID(bookID);
@@ -52,5 +52,5 @@ public class BookReviewController {
     @RequestMapping(value = "/listCommentsByEmail",method = RequestMethod.POST)
     public List<Object> listCommentsByEmail(@RequestParam("email")String email){
         return bookReviewRepository.selectBookReviewByEmail(email);
-    }
+    }*/
 }

@@ -34,7 +34,7 @@ public class ReturnBookController {
             }
         }
         model.addAttribute("borrowedBookList",bookList);
-        return "return";
+        return "book/bookReturnPage.html";
     }
 
     @ResponseBody

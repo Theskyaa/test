@@ -39,7 +39,7 @@ public class BorrowBookController {
         }
         System.out.println(session.getAttribute("currentEmail"));
         model.addAttribute("list",bookList);
-        return "borrow";
+        return "book/bookBorrowPage.html";
     }
 
 

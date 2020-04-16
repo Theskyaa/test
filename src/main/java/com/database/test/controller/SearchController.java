@@ -20,7 +20,7 @@ public class SearchController {
 
 
     //搜索功能，可以找书名和作者，暂定两个
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    /*@RequestMapping(value = "/search",method = RequestMethod.POST)
     public String searchFor(@RequestParam("searchMessage")String searchMessage,
                             Model model){
         List<Book> result=bookRepository.findByBookNameLike("%"+searchMessage+"%");
@@ -29,5 +29,5 @@ public class SearchController {
         }
         model.addAttribute("searchResult",result);
         return "searchPage";
-    }
+    }*/
 }

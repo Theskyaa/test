@@ -5,19 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-  <title>Library</title>
+  <title>Bootstrap 101 Template</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    .img{
-      width: 100%;
-    }
-    .my-img{
-      height: 600px;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <![endif]-->
 
 </head>
 <body>
@@ -117,81 +112,28 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
 
-      <!--巨幕-->
-      <!--<div class="jumbotron">
-        <h1>Welcome</h1>
-      </div>
--->
-
-      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-          <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-        </ol>
-
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-          <div class="item active my-img">
-            <img src="../static/img/image5.jpg" th:src="@{/img/image5.jpg}">
-            <div class="carousel-caption">
-              111
-            </div>
-          </div>
-          <div class="item my-img">
-            <img src="../static/img/image2.jpg" th:src="@{/img/image2.jpg}">
-            <div class="carousel-caption">
-              222
-            </div>
-          </div>
-          <div class="item my-img">
-            <img src="../static/img/image3.jpg" th:src="@{/img/image3.jpg}">
-            <div class="carousel-caption">
-              333
-            </div>
-          </div>
-        </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
       <!--<img src="img/image1.jpg" th:src="@{img/image1.jpg}">-->
-      <!--<div class="table-responsive">
+      <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
           <tr>
-            <th>index_id</th>
-            <th>book_name</th>
-            <th>book_author</th>
-            <th>book_owner</th>
-            <th>book_currentReading</th>
-            <th>borrow_books</th>
+            <th>RecordID</th>
+            <th>BookName</th>
+            <th>BookBorrowTime</th>
+            <th>BookReturnTime</th>
           </tr>
           </thead>
 
           <tbody>
-          <form action="/sendBook" method="post">
-            <tr th:each="list : ${list1}">
-              <td th:text="${list.getBookId()}"></td>
-              <td th:text="${list.getBookName()}"></td>
-              &lt;!&ndash;<td><a href="#" th:text="${list.getBookName()}">Title</a></td>&ndash;&gt;
-              <td th:text="${list.getBookAuthor()}">null</td>
-              <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookCurrentReading()}">null</td>
-              <td><button class="btn btn-lg btn-primary btn-block" type="submit">borrow</button></td>
+            <tr th:each="entity,list : ${borrowRecords}">
+              <td th:text="${entity['record_id']}"></td>
+              <td th:text="${entity['book_name']}"></td>
+              <td th:text="${entity['borrow_time']}"></td>
+              <td th:text="${entity['return_time']}"></td>
             </tr>
-          </form>
           </tbody>
         </table>
-      </div>-->
+      </div>
     </main>
   </div>
 </div>

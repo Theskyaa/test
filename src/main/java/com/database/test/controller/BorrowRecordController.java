@@ -26,6 +26,6 @@ public class BorrowRecordController {
         List<Map<String,Object>> borrowRecords=borrowRecordsRepository.selectBorrowRecordsByEmailAndGroupId(email,groupId);
         model.addAttribute("borrowRecords",borrowRecords);
         System.out.println("borrowRecordSize:"+borrowRecords.size());
-        return "borrowRecordPage";
+        return "book/borrowRecordPage.html";
     }
 }

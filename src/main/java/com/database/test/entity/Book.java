@@ -11,7 +11,7 @@ public class Book {
 
     @Id
     @Column(name = "book_id")
-    public String bookId;
+    public Integer bookId;
 
     @Column(name = "book_name")
     private String bookName;
@@ -34,11 +34,11 @@ public class Book {
     @Column(name = "book_publishinghouse")
     private String bookPublishingHouse;
 
-    public String getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(String bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
 

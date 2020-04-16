@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AddBookController {
 
 
-    @Autowired
+    /*@Autowired
     BookRepository bookRepository;
 
     @ResponseBody
@@ -37,6 +37,6 @@ public class AddBookController {
             return true;
         }
         return false;
-    }
+    }*/
 
 }
