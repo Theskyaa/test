@@ -64,5 +64,11 @@ public interface BookRepository extends JpaRepository<Book,String> {
     void deleteBookBelongByBookIdAndGroupId(Integer bookID,Integer groupId);
 
 
+    //直接删除了书库中的所有书，未考虑到借出未归还的情况，可能在生成借阅记录的时候会出现一些问题
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from book where book_id in (select book_id from bookbelong where group_id=?1)")
+    void deleteByGroupIdFromBookAndBookBelong(Integer groupId);
+
 
 }

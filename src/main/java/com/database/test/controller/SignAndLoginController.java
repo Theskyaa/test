@@ -1,11 +1,8 @@
 package com.database.test.controller;
 
 import com.database.test.entity.User;
-import com.database.test.repository.BorrowRecordsRepository;
-import com.database.test.repository.BookRepository;
 import com.database.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 import java.util.List;
 
 @Controller
@@ -25,12 +21,12 @@ public class SignAndLoginController {
 
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public String login(){
-        return "login";
+        return "user/login.html";
     }
 
     @RequestMapping(value = "/register",method = RequestMethod.GET)
     public String register(){
-        return "register";
+        return "user/register.html";
     }
 
 
@@ -83,7 +79,7 @@ public class SignAndLoginController {
             userRepository.insertUser(email,username,password);
             return "redirect:/login";
         }else {
-            return "register";
+            return "user/register.html";
         }
     }
 

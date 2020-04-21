@@ -1,8 +1,9 @@
 package com.database.test.controller;
 
 import com.database.test.entity.GroupList;
+import com.database.test.repository.BookRepository;
+import com.database.test.repository.BorrowRecordsRepository;
 import com.database.test.repository.GroupRepository;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.Email;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -22,6 +22,12 @@ public class GroupController {
 
     @Autowired
     GroupRepository groupRepository;
+
+    @Autowired
+    BookRepository bookRepository;
+
+    @Autowired
+    BorrowRecordsRepository borrowRecordsRepository;
 
 
     @RequestMapping(value = "/groupJoinIn",method = RequestMethod.GET)
@@ -35,13 +41,6 @@ public class GroupController {
             }
         }
         model.addAttribute("groupList",groupLists);
-
-
-        //show detail
-        for (int i=0;i<groupLists.size();i++){
-            System.out.println(groupLists.get(i).getGroupId());
-            System.out.println(groupLists.get(i).getGroupName());
-        }
         return "group/groupJoinInPage.html";
     }
 
@@ -52,8 +51,7 @@ public class GroupController {
         String email= (String) session.getAttribute("currentEmail");
         Integer result=groupRepository.insertUserBelong(email,groupId);
         GroupList currentGroup=groupRepository.selectByGroupId(groupId);
-        int result1=groupRepository.updateGroupNumber(currentGroup.getGroupNumber()+1);
-        System.out.println("insert result:"+result);
+        groupRepository.updateGroupNumber(currentGroup.getGroupNumber()+1,groupId);
         return true;
     }
 
@@ -65,7 +63,6 @@ public class GroupController {
         System.out.println(email);
         List<GroupList> groupList=groupRepository.selectJoinInGroup(email);
         model.addAttribute("groupList",groupList);
-        System.out.println(groupList.get(0).getGroupId()+groupList.get(0).getGroupName());
         return "group/groupEntryPage.html";
     }
 
@@ -75,29 +72,27 @@ public class GroupController {
     public boolean groupEntrySuccess(@RequestParam("groupId")Integer groupId,
                                     HttpSession session){
         session.setAttribute("currentGroupId",groupId);
-        System.out.println(groupId);
         return true;
     }
 
 
-    @RequestMapping(value = "/groupManage",method = RequestMethod.GET)
-    public String groupManage(HttpSession session,
+    @RequestMapping(value = "/groupQuit",method = RequestMethod.GET)
+    public String groupQuit(HttpSession session,
                               Model model){
         String email= (String) session.getAttribute("currentEmail");
         List<GroupList> groupList=groupRepository.selectJoinInGroup(email);
         model.addAttribute("groupList",groupList);
-        return "group/groupManagePage.html";
+        return "group/groupQuitPage.html";
     }
 
     @ResponseBody
-    @RequestMapping(value = "/groupManageSuccess",method = RequestMethod.POST)
-    public boolean groupManageSuccess(@RequestParam("groupId")Integer groupId,
+    @RequestMapping(value = "/groupQuitSuccess",method = RequestMethod.POST)
+    public boolean groupQuitSuccess(@RequestParam("groupId")Integer groupId,
                                       HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         int result=groupRepository.deleteByGroupIdAndEmail(email,groupId);
         GroupList groupList=groupRepository.selectByGroupId(groupId);
-        int result1=groupRepository.updateGroupNumber(groupList.getGroupNumber()-1);
-        System.out.println("delete result: "+result);
+        groupRepository.updateGroupNumber(groupList.getGroupNumber()-1,groupId);
         return true;
     }
 
@@ -132,5 +127,38 @@ public class GroupController {
         List<GroupList> groupLists=groupRepository.selectGroupLike(groupName,email);
         model.addAttribute("groupList",groupLists);
         return "group/groupJoinInPage.html";
+    }
+
+
+
+    @RequestMapping(value = "/groupManage",method = RequestMethod.GET)
+    public String groupManage(HttpSession session,
+                              Model model){
+
+        String email= (String) session.getAttribute("currentEmail");
+        List<GroupList> groupLists=groupRepository.selectGroupByGroupFounder(email);
+        model.addAttribute("groupList",groupLists);
+        return "group/groupManagePage.html";
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/groupManageSuccess",method = RequestMethod.POST)
+    public boolean groupManageSuccess(@RequestParam("groupId")Integer groupId,
+                                      HttpSession session){
+        String email= (String) session.getAttribute("currentEmail");
+        //该操作涉及删除多张表的记录，需要进行多次测试，可能会有一些问题存在
+
+        //删除UserBelong表中的内容
+        groupRepository.deleteByGroupIdFromUserBelong(groupId);
+        //删除group表中的内容
+        groupRepository.deleteByGroupIdFromGroupList(groupId);
+        //通过bookbelong,borrow来通过groupId删除该书库的借阅记录
+        borrowRecordsRepository.deleteByGroupIdFromBorrowRecord(groupId);
+        //通过bookbelong表删除Book表中该小组书库中的所有书
+        bookRepository.deleteByGroupIdFromBookAndBookBelong(groupId);
+        //删除bookbelong表中记录
+        groupRepository.deleteByGroupIdFromBookBelong(groupId);
+        return true;
     }
 }

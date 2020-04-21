@@ -38,8 +38,8 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "update grouplist set group_number=?1 where group_id=?1")
-    int updateGroupNumber(Integer num);
+    @Query(nativeQuery = true,value = "update grouplist set group_number=?1 where group_id=?2")
+    void updateGroupNumber(Integer num,Integer groupId);
 
     @Transactional
     @Modifying
@@ -48,4 +48,27 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
 
     @Query(nativeQuery = true,value = "select * from grouplist where group_name like concat('%',?1,'%') and group_id not in (select userbelong.group_id from userbelong where email=?2)")
     List<GroupList> selectGroupLike(String groupName,String email);
+
+
+    @Query(nativeQuery = true,value = "select * from grouplist where group_founder=?1")
+    List<GroupList> selectGroupByGroupFounder(String email);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from userbelong where group_id=?1")
+    void deleteByGroupIdFromUserBelong(Integer groupID);
+
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from bookbelong where group_id=?1")
+    void deleteByGroupIdFromBookBelong(Integer groupId);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from grouplist where group_id=?1")
+    void deleteByGroupIdFromGroupList(Integer groupId);
+
+
 }
