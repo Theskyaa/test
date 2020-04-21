@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+    <!--<link rel="icon" href="https://getbootstrap.com/favicon.ico">-->
 
-    <title>Signin</title>
+    <title>Sign In</title>
+    <link href="../../static/ico/ico2.jpg" th:href="@{ico/ico2.jpg}" rel="icon">
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="../../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/signin.css" th:href="@{css/signin.css}" rel="stylesheet">
+    <link href="../../static/css/signin.css" th:href="@{css/signin.css}" rel="stylesheet">
   </head>
 
   <body class="text-center">
     <form class="form-signin" action="/loginSuccess" method="post">
-      <img class="mb-4" src="img/image1.jpg" alt="" width="72" height="72">
+      <img class="mb-4" src="../../static/img/image10.jpg" th:src="@{img/image10.jpg}" alt="" width="200" height="120">
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
       <label for="inputEmail" class="sr-only">Email address</label>
       <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
