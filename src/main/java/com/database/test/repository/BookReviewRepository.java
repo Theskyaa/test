@@ -9,26 +9,18 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface BookReviewRepository extends JpaRepository<BookReview,Integer> {
-    @Query(nativeQuery = true, value = "select Users.username,BookReview.review_time,BookReview.review_text " +
-            "from BookReview,Library.dbo.LibraryItem,Users " +
-            "where Users.email=BookReview.email and LibraryItem.book_id=BookReview.book_id and BookReview.book_id=?1")
-    List<Object> selectBookReviewByBookID(String bookID);
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "delete from bookreview where book_id in (select book_id from bookbelong where  bookbelong.group_id=?1)")
+    void deleteByBookIdFromBookBelong(Integer groupId);
 
-
-
-    @Query(nativeQuery = true,value = "select book.book_name,review_time,review_text from book,bookreview where bookreview.email=?1 and book.book_id=bookreview.book_id")
-    List<Object> selectBookReviewByEmail(String email);
-
-    @Query(nativeQuery = true,value = "select username,review_time,review_text from user,book,bookreview where user.email=bookreview.email and book.book_id=bookreview.book_id and book.book_name=?1")
-    List<Object> selectBookReviewBuBookName(String bookName);
+    @Query(nativeQuery = true,value = "select * from bookreview order by review_id desc limit 1")
+    List<BookReview> selectMaxReviewId();
 
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "insert into bookreview (review_id, email, book_id, review_time, review_text) values (?1,?2,?3,?4,?5)")
-    int insertBookReview(int reviewId,String email,String bookId,String reviewTime,String reviewText);
-
-
-
+    @Query(nativeQuery = true,value = "insert into bookreview (review_id, review_time, review_text, review_star, email, book_id) values (?1,?2,?3,?4,?5,?6)")
+    void insertReviewRecord(Integer reviewId,String time,String text,Integer reviewStar,String email,Integer bookID);
 
 }

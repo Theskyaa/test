@@ -31,7 +31,7 @@
               data: {"groupId":groupId},
               dataType: "json",
               success: function (result) {
-                alert("Drop Out Successful!")
+                alert("Disband Successful!")
                 window.location.href='/groupManage';
                 window.parent.closeDialog('editUser');
               }
@@ -133,6 +133,7 @@
               <td th:text="${list.getGroupId()}"></td>
               <td th:text="${list.getGroupName()}"></td>
               <td th:text="${list.getGroupNumber()}"></td>
+              <td><a href="#">Detail</a></td>
               <td><button class="btn btn-danger btn-lg" type="submit">Disband</button></td>
             </tr>
           </tbody>

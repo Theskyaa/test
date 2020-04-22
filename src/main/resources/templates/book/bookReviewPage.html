@@ -23,23 +23,20 @@
         all[i].onclick = function () {
           var t = this.parentNode.parentNode;
           id = t.cells[0].innerText;
-          //alert(id);
-
-          var r = confirm("Are you sure to return this book？");
-          if (r == true) {
             $.ajax({
               type: "POST",
-              url: '/returnBookSuccess',
+              url: '/bookReviewSuccess',
               data: {"bookId":id},
               dataType: "json",
               success: function(result) {
-                alert('Return Successful!');
-                location.reload();
+                window.location.href='/makeReview';
                 window.parent.closeDialog('editUser');
+              },
+              error:function (result) {
+                alert("Connection Error!")
               }
             });
           }
-        }
       }
     }
 
@@ -143,7 +140,6 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
 
-      <!--<img src="img/image1.jpg" th:src="@{img/image1.jpg}">-->
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -158,14 +154,14 @@
           </thead>
 
           <tbody>
-            <tr th:each="list : ${borrowedBookList}">
+            <tr th:each="list : ${bookList}">
               <td th:text="${list.getBookId()}"></td>
               <td th:text="${list.getBookName()}"></td>
               <td th:text="${list.getBookAuthor()}"></td>
               <td th:text="${list.getBookOwner()}"></td>
               <td th:text="${list.getBookIntroduction()}"></td>
               <td><a href="#">Detail</a></td>
-              <td><button class="btn btn-lg btn-primary btn-block" onclick="" type="submit">return</button></td>
+              <td><button class="btn btn-lg btn-primary btn-block" onclick="" type="submit">MakeReview</button></td>
             </tr>
           </tbody>
         </table>

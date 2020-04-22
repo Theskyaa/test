@@ -33,7 +33,7 @@ public interface BorrowRecordsRepository extends JpaRepository<BorrowRecords,Int
 
     @Transactional
     @Modifying
-    @Query(nativeQuery = true,value = "delete from borrowrecord where book_id in (select borrowrecord.book_id from bookbelong,book,borrowrecord where group_id=?1 and bookbelong.book_id=book.book_id and book.book_id=borrowrecord.book_id)")
+    @Query(nativeQuery = true,value = "delete from borrowrecord where book_id in (select book.book_id from bookbelong,book where group_id=?1 and bookbelong.book_id=book.book_id)")
     void deleteByGroupIdFromBorrowRecord(Integer groupId);
 
 }

@@ -34,7 +34,7 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
     int deleteByGroupIdAndEmail(String email,Integer groupId);
 
     @Query(nativeQuery = true,value = "select * from grouplist order by group_id desc limit 1")
-    GroupList selectMaxGroupId();
+    List<GroupList> selectMaxGroupId();
 
     @Transactional
     @Modifying

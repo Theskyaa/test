@@ -27,7 +27,7 @@ public class BookController {
 
 
     @ResponseBody
-    @RequestMapping(value = "bookUploadSuccess",method = RequestMethod.POST)
+    @RequestMapping(value = "/bookUploadSuccess",method = RequestMethod.POST)
     public boolean bookUploadSuccess(@RequestParam("bookName")String bookName,
                                      @RequestParam("bookAuthor")String bookAuthor,
                                      @RequestParam("bookPublishingHouse")String bookPublishingHouse,

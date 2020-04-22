@@ -23,8 +23,11 @@ public class BookReview {
     @Column(name = "review_time")
     private String reviewTime;
 
-    @Column(name = "review_Text")
+    @Column(name = "review_text")
     private String reviewText;
+
+    @Column(name = "review_star")
+    private Integer reviewStar;
 
     public int getReviewID() {
         return reviewID;
@@ -64,5 +67,13 @@ public class BookReview {
 
     public void setReviewText(String reviewText) {
         this.reviewText = reviewText;
+    }
+
+    public Integer getReviewStar() {
+        return reviewStar;
+    }
+
+    public void setReviewStar(Integer reviewStar) {
+        this.reviewStar = reviewStar;
     }
 }

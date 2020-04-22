@@ -2,8 +2,10 @@ package com.database.test.controller;
 
 import com.database.test.entity.GroupList;
 import com.database.test.repository.BookRepository;
+import com.database.test.repository.BookReviewRepository;
 import com.database.test.repository.BorrowRecordsRepository;
 import com.database.test.repository.GroupRepository;
+import com.database.test.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,9 @@ public class GroupController {
 
     @Autowired
     BorrowRecordsRepository borrowRecordsRepository;
+
+    @Autowired
+    BookReviewRepository bookReviewRepository;
 
 
     @RequestMapping(value = "/groupJoinIn",method = RequestMethod.GET)
@@ -108,13 +113,14 @@ public class GroupController {
                                      @RequestParam("groupIntroduction")String groupIntroduction,
                                      HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
-        Calendar calendar=Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd :hh:mm:ss");
-        String time=simpleDateFormat.format(calendar.getTime());
-        GroupList groupList=groupRepository.selectMaxGroupId();
-        Integer maxId=groupList.getGroupId();
-        int result=groupRepository.insertGroupListRecord(maxId+1,groupName,email,time,groupIntroduction,0);
-        System.out.println("create group: "+result);
+        List<GroupList> groupList=groupRepository.selectMaxGroupId();
+        int maxId=0;
+        if (groupList.size()==0){
+            maxId=0;
+        }else {
+            maxId=groupList.get(0).getGroupId();
+        }
+        int result=groupRepository.insertGroupListRecord(maxId+1,groupName,email,new TimeUtil().getCurrentTime(),groupIntroduction,0);
         return true;
     }
 
@@ -149,8 +155,8 @@ public class GroupController {
         String email= (String) session.getAttribute("currentEmail");
         //该操作涉及删除多张表的记录，需要进行多次测试，可能会有一些问题存在
 
-        //删除UserBelong表中的内容
-        groupRepository.deleteByGroupIdFromUserBelong(groupId);
+        //删除该小组书库中所有书的Review记录
+        bookReviewRepository.deleteByBookIdFromBookBelong(groupId);
         //删除group表中的内容
         groupRepository.deleteByGroupIdFromGroupList(groupId);
         //通过bookbelong,borrow来通过groupId删除该书库的借阅记录
@@ -159,6 +165,8 @@ public class GroupController {
         bookRepository.deleteByGroupIdFromBookAndBookBelong(groupId);
         //删除bookbelong表中记录
         groupRepository.deleteByGroupIdFromBookBelong(groupId);
+        //删除UserBelong表中的内容
+        groupRepository.deleteByGroupIdFromUserBelong(groupId);
         return true;
     }
 }

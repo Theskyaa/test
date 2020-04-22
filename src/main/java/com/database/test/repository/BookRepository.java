@@ -71,4 +71,8 @@ public interface BookRepository extends JpaRepository<Book,String> {
     void deleteByGroupIdFromBookAndBookBelong(Integer groupId);
 
 
+    @Query(nativeQuery = true,value = "select book.book_id, book_name, book_author, book_owner, book_reading, book_publishinghouse, book_score, book_introduction from book,bookbelong where group_id=?1 and book.book_id=bookbelong.book_id")
+    List<Book> selectBookByGroupId(Integer groupId);
+
+
 }
