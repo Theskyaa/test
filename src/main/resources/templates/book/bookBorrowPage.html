@@ -17,22 +17,21 @@
 
   <script type="text/javascript">
     window.onload=function () {
-      var all=document.getElementsByTagName("button");
+      var all = document.getElementsByTagName("button");
       var id
-      for (var i=0;i<all.length;i++){
-        all[i].onclick=function () {
-          var t=this.parentNode.parentNode;
-          id=t.cells[0].innerText;
-          //alert(id);
+      for (var i = 0; i < all.length; i++) {
+        all[i].onclick = function () {
+          var t = this.parentNode.parentNode;
+          id = t.cells[0].innerText;
           var r = confirm("Are you sure to borrow this book？");
           if (r == true) {
             //x = "Yes！";
             $.ajax({
               type: "POST",
               url: '/borrowBook',
-              data: {"bookId":id},
+              data: {"bookId": id},
               dataType: "json",
-              success: function(result) {
+              success: function (result) {
                 alert('Borrow Successful!');
                 location.reload();
                 window.parent.closeDialog('editUser');
@@ -41,62 +40,32 @@
           } else {
             //x = "No！";
           }
-
-          /*$.ajax({
-            type: "POST",
-            url: '/borrowBook',
-            data: {"bookId":id},
-            dataType: "json",
-            success: function(result) {
-              alert('保存成功');
-              location.reload();
-              window.parent.closeDialog('editUser');
-            }
-          });*/
         }
       }
 
-      /*$.ajax({
-        type: "POST",
-        url: '/borrowbook1',
-        data: JSON.stringify(paramsArr),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(result) {
-          alert('保存成功');
-          window.parent.closeDialog('editUser');
+      var allA = document.getElementsByTagName("a");
+      for (var i = 0; i < allA.length; i++) {
+        allA[i].onclick = function () {
+          var t = this.parentNode.parentNode;
+          id = t.cells[0].innerText;
+          $.ajax({
+            type: "POST",
+            url: '/bookId',
+            data: {"bookId": id},
+            dataType: "json",
+            success: function (result) {
+              window.location.href="/bookDetail";
+              window.parent.closeDialog('editUser');
+            }
+          });
         }
-      });*/
+      }
+
+
+
+
 
     }
-
-            /*function saveTableInfo(){
-              var trList = $("#tablelist").children("tbody").children("tr");
-              var paramsArr = new Array();
-              for (var i=0;i<trList.length;i++){
-                params = {};
-                var tdArr = trList.eq(i).find("td");
-                var ID = tdArr.eq(0).find('input').val();//数据列id
-                var PHONENUMBER = tdArr.eq(2).find('input').val();//电话号码
-                params.ID=ID;
-                params.PHONENUMBER=PHONENUMBER;
-                params.ISUSE=ISUSE;
-                paramsArr.push(params);
-              }
-              //alert(JSON.stringify(paramsArr));
-              $.ajax({
-                type: "POST",
-                url: '/borrowbook1',
-                data: JSON.stringify(paramsArr),
-                contentType: "application/json",
-                dataType: "json",
-                success: function(result) {
-                  alert('保存成功');
-                  window.parent.closeDialog('editUser');
-                }
-              });
-            }*/
-
   </script>
 
 </head>
@@ -116,10 +85,6 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#" >Link</a></li>
-      </ul>
       <form class="navbar-form navbar-left" action="/search" method="post">
         <div class="form-group">
           <input type="text" class="form-control" name="searchMessage" placeholder="Search">
@@ -128,11 +93,12 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GroupManage<span class="caret"></span></a>
+          <a href="#" th:text="${session.currentGroupName}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GroupManage<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/groupEntry">小组选择</a></li>
             <li><a href="/groupJoinIn">小组加入</a></li>
             <li><a href="/groupCreate">小组创建</a></li>
+            <li><a href="/groupQuit">小组退出</a></li>
             <li><a href="/groupManage">小组管理</a></li>
           </ul>
         </li>

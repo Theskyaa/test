@@ -68,4 +68,11 @@ public class BookReviewController {
         return true;
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "deleteBookReview",method = RequestMethod.POST)
+    public boolean deleteBookReview(@RequestParam("reviewId")Integer reviewId){
+        bookReviewRepository.deleteByReviewId(reviewId);
+        return true;
+    }
 }

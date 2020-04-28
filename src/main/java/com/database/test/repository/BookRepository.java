@@ -16,6 +16,9 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(nativeQuery = true,value = "select * from book")
     List<Book> listAll();
 
+    @Query(nativeQuery = true,value = "select * from book where book_id=?1")
+    Book selectByBookId(Integer bookId);
+
 
     @Transactional
     @Modifying
@@ -74,5 +77,9 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(nativeQuery = true,value = "select book.book_id, book_name, book_author, book_owner, book_reading, book_publishinghouse, book_score, book_introduction from book,bookbelong where group_id=?1 and book.book_id=bookbelong.book_id")
     List<Book> selectBookByGroupId(Integer groupId);
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update book set book_name=?2,book_author=?3,book_publishinghouse=?4,book_introduction=?5 where book_id=?1")
+    void updateBookInfo(Integer bookId,String bookName,String bookAuthor,String publishingHouse,String bookIntroduction);
 
 }

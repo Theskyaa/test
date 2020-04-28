@@ -16,32 +16,52 @@
   <![endif]-->
 
   <script type="text/javascript">
-    window.onload=function () {
-      var all = document.getElementsByTagName("button");
-      var id
-      for (var i = 0; i < all.length; i++) {
-        all[i].onclick = function () {
-          var t = this.parentNode.parentNode;
-          var bookId = t.cells[0].innerText;
-          var x=confirm("Are you sure to delete this book?")
-          if (x=true){
-            $.ajax({
-              type: "POST",
-              url: '/bookManageSuccess',
-              data: {"bookId":bookId},
-              dataType: "json",
-              error: function (request) {
-                alert("Error! Current book is reading by others!");
-              },
-              success: function (result) {
-                alert("Delete Successful!")
-                window.location.href='/bookManage';
-                window.parent.closeDialog('editUser');
-              },
-            });
-          }
-          }
-        }
+
+
+    function modifyButton(event) {
+      var btn=event.srcElement;
+      var t=btn.parentNode.parentNode;
+      var bookId = t.cells[0].innerText;
+      $.ajax({
+        type: "POST",
+        url: '/bookId',
+        data: {"bookId": bookId},
+        dataType: "json",
+        error: function (request) {
+          alert("Error!");
+        },
+        success: function (result) {
+          window.location.href = '/bookInfoManage';
+          window.parent.closeDialog('editUser');
+        },
+      });
+    }
+
+
+    function deleteButton(event) {
+      var btn=event.srcElement;
+      var t=btn.parentNode.parentNode;
+      var bookId = t.cells[0].innerText;
+      //alert(bookId);
+      var x = confirm("Are you sure to delete this book?")
+      if (x = true) {
+        $.ajax({
+          type: "POST",
+          url: '/bookManageSuccess',
+          data: {"bookId": bookId},
+          dataType: "json",
+          error: function (request) {
+            alert("Error! Current book is reading by others!");
+          },
+          success: function (result) {
+            alert("Delete Successful!")
+            window.location.href = '/bookManage';
+            window.parent.closeDialog('editUser');
+          },
+        });
+      } else {
+        //null
+      }
     }
   </script>
 
@@ -62,10 +82,6 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#" >Link</a></li>
-      </ul>
       <form class="navbar-form navbar-left" action="/search" method="post">
         <div class="form-group">
           <input type="text" class="form-control" name="searchMessage" placeholder="Search">
@@ -74,11 +90,12 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GroupManage<span class="caret"></span></a>
+          <a href="#" th:text="${session.currentGroupName}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">GroupManage<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/groupEntry">小组选择</a></li>
             <li><a href="/groupJoinIn">小组加入</a></li>
             <li><a href="/groupCreate">小组创建</a></li>
+            <li><a href="/groupQuit">小组退出</a></li>
             <li><a href="/groupManage">小组管理</a></li>
           </ul>
         </li>
@@ -152,6 +169,7 @@
             <th>Book_Author</th>
             <th>Book_Introduction</th>
             <th>Book_Detail</th>
+            <th>Book_Delete</th>
           </tr>
           </thead>
 
@@ -161,8 +179,8 @@
             <td th:text="${list.getBookName()}"></td>
             <td th:text="${list.getBookAuthor()}"></td>
             <td th:text="${list.getBookIntroduction()}"></td>
-            <td><a href="#">Detail</a></td>
-            <td><button class="btn btn-danger btn-lg" type="submit">Delete</button></td>
+            <td><button class="btn btn-info btn-lg" type="button" onclick="modifyButton(event)">Modify</button></td>
+            <td><button class="btn btn-danger btn-lg" type="button" onclick="deleteButton(event)">Delete</button></td>
           </tr>
           </tbody>
         </table>

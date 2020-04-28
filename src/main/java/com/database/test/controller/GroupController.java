@@ -77,6 +77,8 @@ public class GroupController {
     public boolean groupEntrySuccess(@RequestParam("groupId")Integer groupId,
                                     HttpSession session){
         session.setAttribute("currentGroupId",groupId);
+        String groupName=groupRepository.selectByGroupId(groupId).getGroupName();
+        session.setAttribute("currentGroupName",groupName);
         return true;
     }
 
