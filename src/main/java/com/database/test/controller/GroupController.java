@@ -35,6 +35,7 @@ public class GroupController {
     BookReviewRepository bookReviewRepository;
 
 
+    //小组加入
     @RequestMapping(value = "/groupJoinIn",method = RequestMethod.GET)
     public String groupJoinIn(HttpSession session,
                               Model model){
@@ -48,7 +49,6 @@ public class GroupController {
         model.addAttribute("groupList",groupLists);
         return "group/groupJoinInPage.html";
     }
-
     @ResponseBody
     @RequestMapping(value = "/groupJoinInSuccess",method = RequestMethod.POST)
     public boolean groupJoinInSuccess(@RequestParam("groupId")Integer groupId,
@@ -61,6 +61,7 @@ public class GroupController {
     }
 
 
+    //小组选择
     @RequestMapping(value = "/groupEntry",method = RequestMethod.GET)
     public String groupEntry(HttpSession session,
                              Model model){
@@ -70,8 +71,6 @@ public class GroupController {
         model.addAttribute("groupList",groupList);
         return "group/groupEntryPage.html";
     }
-
-
     @ResponseBody
     @RequestMapping(value = "/groupEntrySuccess",method = RequestMethod.POST)
     public boolean groupEntrySuccess(@RequestParam("groupId")Integer groupId,
@@ -83,6 +82,7 @@ public class GroupController {
     }
 
 
+    //小组退出
     @RequestMapping(value = "/groupQuit",method = RequestMethod.GET)
     public String groupQuit(HttpSession session,
                               Model model){
@@ -91,7 +91,6 @@ public class GroupController {
         model.addAttribute("groupList",groupList);
         return "group/groupQuitPage.html";
     }
-
     @ResponseBody
     @RequestMapping(value = "/groupQuitSuccess",method = RequestMethod.POST)
     public boolean groupQuitSuccess(@RequestParam("groupId")Integer groupId,
@@ -139,6 +138,7 @@ public class GroupController {
 
 
 
+    //小组管理
     @RequestMapping(value = "/groupManage",method = RequestMethod.GET)
     public String groupManage(HttpSession session,
                               Model model){
@@ -148,8 +148,6 @@ public class GroupController {
         model.addAttribute("groupList",groupLists);
         return "group/groupManagePage.html";
     }
-
-
     @ResponseBody
     @RequestMapping(value = "/groupManageSuccess",method = RequestMethod.POST)
     public boolean groupManageSuccess(@RequestParam("groupId")Integer groupId,
@@ -170,5 +168,49 @@ public class GroupController {
         //删除UserBelong表中的内容
         groupRepository.deleteByGroupIdFromUserBelong(groupId);
         return true;
+    }
+    //小组信息修改
+    @ResponseBody
+    @RequestMapping(value = "/chooseGroup",method = RequestMethod.POST)
+    public boolean chooseGroup(@RequestParam("groupId")Integer groupId,
+                               HttpSession session){
+        session.setAttribute("modifyGroupID",groupId);
+        return true;
+    }
+    @RequestMapping(value = "/groupInfoManage",method = RequestMethod.GET)
+    public String getGroupInfoManage(HttpSession session,
+                               Model model){
+        Integer groupId= (Integer) session.getAttribute("modifyGroupID");
+        GroupList group=groupRepository.selectByGroupId(groupId);
+        model.addAttribute("groupId",groupId);
+        model.addAttribute("groupName",group.getGroupName());
+        model.addAttribute("groupFounder",group.getGroupFounder());
+        model.addAttribute("groupFoundingTime",group.getGroupFoundingTime());
+        model.addAttribute("groupNumber",group.getGroupNumber());
+        model.addAttribute("groupIntroduction",group.getGroupIntroduction());
+        return "group/groupInfoManagePage.html";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/groupInfoModify",method = RequestMethod.POST)
+    public boolean groupInfoModify(@RequestParam("groupId")Integer groupId,
+                                   @RequestParam("groupName")String groupName,
+                                   @RequestParam("groupIntroduction")String groupIntroduction){
+        groupRepository.updateGroupInfo(groupId,groupName,groupIntroduction);
+        return true;
+    }
+
+    //小组信息的detail显示
+    @RequestMapping(value = "/groupDetail",method = RequestMethod.GET)
+    public String getGroupInfoDetail(HttpSession session,
+                                     Model model){
+        Integer groupId= (Integer) session.getAttribute("modifyGroupID");
+        GroupList group=groupRepository.selectByGroupId(groupId);
+        model.addAttribute("groupId",groupId);
+        model.addAttribute("groupName",group.getGroupName());
+        model.addAttribute("groupFounder",group.getGroupFounder());
+        model.addAttribute("groupFoundingTime",group.getGroupFoundingTime());
+        model.addAttribute("groupNumber",group.getGroupNumber());
+        model.addAttribute("groupIntroduction",group.getGroupIntroduction());
+        return "group/groupInfoPage.html";
     }
 }

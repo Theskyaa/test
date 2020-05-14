@@ -16,31 +16,47 @@
   <![endif]-->
 
   <script type="text/javascript">
-    window.onload=function () {
-      var all = document.getElementsByTagName("button");
-      var id
-      for (var i = 0; i < all.length; i++) {
-        all[i].onclick = function () {
-          var t = this.parentNode.parentNode;
-          var groupId = t.cells[0].innerText;
-          var x=confirm("Are you sure to disband this team?")
-          if (x=true){
-            $.ajax({
-              type: "POST",
-              url: '/groupManageSuccess',
-              data: {"groupId":groupId},
-              dataType: "json",
-              success: function (result) {
-                alert("Disband Successful!")
-                window.location.href='/groupManage';
-                window.parent.closeDialog('editUser');
-              }
-            });
-          }else {
+    function modifyButton(event) {
+      var btn=event.srcElement;
+      var t=btn.parentNode.parentNode;
+      var groupId = t.cells[0].innerText;
+      $.ajax({
+        type: "POST",
+        url: '/chooseGroup',
+        data: {"groupId": groupId},
+        dataType: "json",
+        error: function (request) {
+          alert("Error!");
+        },
+        success: function (result) {
+          window.location.href = '/groupInfoManage';
+          window.parent.closeDialog('editUser');
+        },
+      });
+    }
+
+
+    function disbandButton(event) {
+      var btn=event.srcElement;
+      var t=btn.parentNode.parentNode;
+      var groupId = t.cells[0].innerText;
+      //alert(bookId);
+      var x=confirm("Are you sure to disband this team?")
+      if (x=true){
+        $.ajax({
+          type: "POST",
+          url: '/groupManageSuccess',
+          data: {"groupId":groupId},
+          dataType: "json",
+          success: function (result) {
+            alert("Disband Successful!")
             window.location.href='/groupManage';
+            window.parent.closeDialog('editUser');
           }
-          }
-        }
+        });
+      }else {
+        window.location.href='/groupManage';
+      }
     }
   </script>
 
@@ -125,6 +141,8 @@
             <th>GroupId</th>
             <th>GroupName</th>
             <th>GroupNumber</th>
+            <th>GroupDetail</th>
+            <th>GroupDisband</th>
           </tr>
           </thead>
 
@@ -133,8 +151,8 @@
               <td th:text="${list.getGroupId()}"></td>
               <td th:text="${list.getGroupName()}"></td>
               <td th:text="${list.getGroupNumber()}"></td>
-              <td><a href="#">Detail</a></td>
-              <td><button class="btn btn-danger btn-lg" type="submit">Disband</button></td>
+              <td><button class="btn btn-info btn-lg" type="button" onclick="modifyButton(event)">Modify</button></td>
+              <td><button class="btn btn-danger btn-lg" type="button" onclick="disbandButton(event)">Disband</button></td>
             </tr>
           </tbody>
         </table>

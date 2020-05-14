@@ -41,6 +41,25 @@
           }
           }
         }
+
+
+      var allA = document.getElementsByTagName("a");
+      for (var i = 0; i < allA.length; i++) {
+        allA[i].onclick = function () {
+          var t = this.parentNode.parentNode;
+          id = t.cells[0].innerText;
+          $.ajax({
+            type: "POST",
+            url: '/chooseGroup',
+            data: {"groupId": id},
+            dataType: "json",
+            success: function (result) {
+              window.location.href="/groupDetail";
+              window.parent.closeDialog('editUser');
+            }
+          });
+        }
+      }
     }
   </script>
 
@@ -125,6 +144,7 @@
             <th>GroupId</th>
             <th>GroupName</th>
             <th>GroupNumber</th>
+            <th>GroupDetail</th>
           </tr>
           </thead>
 
@@ -133,6 +153,7 @@
               <td th:text="${list.getGroupId()}"></td>
               <td th:text="${list.getGroupName()}"></td>
               <td th:text="${list.getGroupNumber()}"></td>
+              <td><a href="#">Detail</a></td>
               <td><button class="btn btn-danger btn-lg" type="submit">Drop Out</button></td>
             </tr>
           </tbody>

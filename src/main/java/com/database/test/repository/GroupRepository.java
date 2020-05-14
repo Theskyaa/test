@@ -71,4 +71,9 @@ public interface GroupRepository extends JpaRepository<GroupList,Integer> {
     void deleteByGroupIdFromGroupList(Integer groupId);
 
 
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true,value = "update grouplist set group_name=?2,group_introduction=?3 where group_id=?1")
+    void updateGroupInfo(Integer groupId,String groupName,String groupIntroduction);
+
 }

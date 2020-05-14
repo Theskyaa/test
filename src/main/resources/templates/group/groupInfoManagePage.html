@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-  <title>UserInfo</title>
+  <title>GroupInfoManage</title>
   <link href="../../static/ico/ico2.jpg" th:href="@{ico/ico2.jpg}" rel="icon">
 
   <!-- Bootstrap -->
@@ -17,27 +17,24 @@
 
   <script type="text/javascript">
     function subCommit() {
-      var userEmail=document.getElementById("inputEmail").value;
-      var userName=document.getElementById("inputName").value;
-      var userGender=document.getElementById("inputGender").value;
-      var userQQ=document.getElementById("inputQQ").value;
-      var userTel=document.getElementById("inputTel").value;
-      var userIntroduction =$("#inputIntroduction").val();
-      if (userName==""||userName==""||userGender==""||userTel==""||userQQ==""||userIntroduction==""){
-        alert("请完善个人信息!!!!!");
+      var groupId=document.getElementById("inputGroupId").value;
+      var groupName=document.getElementById("inputGroupName").value;
+      var groupIntroduction =$("#inputGroupIntroduction").val();
+      if (groupName==""||groupIntroduction==""){
+        alert("请完善团队信息!!!!!");
         return false;
       }else {
         $.ajax({
           type: "POST",
-          url: "/userInfoChange",
-          data: {"userEmail":userEmail,"userName":userName,"userGender":userGender,"userQQ":userQQ,"userTel":userTel,"userIntroduction":userIntroduction},
+          url: "/groupInfoModify",
+          data: {"groupId":groupId,"groupName":groupName,"groupIntroduction":groupIntroduction},
           async: false,
           error: function (request) {
             alert("Connection Error");
           },
           success: function (data) {
             alert("Modify Success!");
-            window.location.href = "/userInfo";
+            window.location.href = "/groupInfoManage";
           }
         });
       }
@@ -56,7 +53,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/groupMenu">UserInfo</a>
+      <a class="navbar-brand" href="/groupMenu">GroupInfo</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -98,44 +95,44 @@
 
       <form class="form-horizontal">
         <div class="form-group">
-          <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+          <label for="inputGroupId" class="col-sm-2 control-label">Group_ID</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userEmail}" readonly class="form-control" id="inputEmail">
+            <input type="text" th:value="${groupId}" class="form-control" id="inputGroupId" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="inputName" class="col-sm-2 control-label">Name</label>
+          <label for="inputGroupName" class="col-sm-2 control-label">Group_Name</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userName}" class="form-control" id="inputName">
+            <input type="text" th:value="${groupName}" class="form-control" id="inputGroupName">
           </div>
         </div>
         <div class="form-group">
-          <label for="inputGender" class="col-sm-2 control-label">Gender</label>
+          <label for="inputGroupFounder" class="col-sm-2 control-label">Group_Founder</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userGender}" class="form-control" id="inputGender">
+            <input type="text" th:value="${groupFounder}" class="form-control" id="inputGroupFounder" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="inputTel" class="col-sm-2 control-label">Tel</label>
+          <label for="inputGroupFoundingTime" class="col-sm-2 control-label">Group_FoundingTime</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userTel}" class="form-control" id="inputTel">
+            <input type="text" th:value="${groupFoundingTime}" class="form-control" id="inputGroupFoundingTime" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="inputQQ" class="col-sm-2 control-label">QQ</label>
+          <label for="inputGroupNumber" class="col-sm-2 control-label">Group_Number</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userQQ}" class="form-control" id="inputQQ">
+            <input type="text" th:value="${groupNumber}" class="form-control" id="inputGroupNumber" readonly>
           </div>
         </div>
         <div class="form-group">
-          <label for="inputIntroduction" class="col-sm-2 control-label">Introduction</label>
+          <label for="inputGroupIntroduction" class="col-sm-2 control-label">Group_Introduction</label>
           <div class="col-sm-7">
-            <textarea class="form-control" th:text="${userIntroduction}" id="inputIntroduction" rows="6"></textarea>
+            <textarea class="form-control" th:text="${groupIntroduction}" id="inputGroupIntroduction" rows="6"></textarea>
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-5">
-            <button id="subButton" type="button" onclick="subCommit()" class="btn btn-success btn-lg">Modify</button>
+            <button id="subButton" type="button" onclick="subCommit()" class="btn btn-success btn-lg">Submit</button>
           </div>
         </div>
       </form>

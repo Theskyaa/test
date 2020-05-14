@@ -76,9 +76,6 @@ public class UserController {
 
         List<User> users=userRepository.selectByEmail(email);
         if (users.size()==0){
-            System.out.println(email);
-            System.out.println(password);
-            System.out.println(username);
             userRepository.insertUser(email,username,password,gender,QQ,Tel,introduction);
             return "redirect:/login";
         }else {
@@ -116,5 +113,4 @@ public class UserController {
         userRepository.updateUserInfo(userEmail,userName,userGender,userQQ,userTel,userIntroduction);
         return true;
     }
-
 }
