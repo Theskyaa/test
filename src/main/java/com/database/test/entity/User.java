@@ -16,6 +16,18 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "qq")
+    private String QQ;
+
+    @Column(name = "tel")
+    private String tel;
+
+    @Column(name = "introduction")
+    private String introduction;
+
     public String getEmail() {
         return email;
     }
@@ -38,5 +50,37 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getQQ() {
+        return QQ;
+    }
+
+    public void setQQ(String QQ) {
+        this.QQ = QQ;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }
