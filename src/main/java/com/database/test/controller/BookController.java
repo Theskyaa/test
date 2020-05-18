@@ -5,6 +5,7 @@ import com.database.test.entity.Book;
 import com.database.test.entity.BookReview;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.BookReviewRepository;
+import com.database.test.util.SubTextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,6 +51,13 @@ public class BookController {
         }else {
             maxBookId=bookList.get(0).getBookId();
         }
+
+        if (!bookName.startsWith("《")){
+            bookName="《"+bookName;
+        }
+        if (!bookName.endsWith("》")){
+            bookName=bookName+"》";
+        }
         bookRepository.insertBook(maxBookId+1,bookName,bookAuthor,email,"null",bookPublishingHouse,bookScore,bookIntroduction);
         bookRepository.insertBookBelong(maxBookId+1,groupId);
         return true;
@@ -62,6 +70,8 @@ public class BookController {
         String email= (String) session.getAttribute("currentEmail");
         Integer groupId= (Integer) session.getAttribute("currentGroupId");
         List<Book> bookList=bookRepository.selectBookByBookOwnerAndGroupId(email,groupId);
+
+        new SubTextUtil().subBookIntroduction(bookList);
         model.addAttribute("bookList",bookList);
         return "book/bookManagePage.html";
     }

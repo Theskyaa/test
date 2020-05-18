@@ -5,6 +5,7 @@ import com.database.test.entity.Book;
 import com.database.test.entity.BookReview;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.BookReviewRepository;
+import com.database.test.util.SubTextUtil;
 import com.database.test.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class BookReviewController {
         String email= (String) session.getAttribute("currentEmail");
         Integer groupId= (Integer) session.getAttribute("currentGroupId");
         List<Book> bookList=bookRepository.selectBookByGroupId(groupId);
+
+        new SubTextUtil().subBookIntroduction(bookList);
+
         model.addAttribute("bookList",bookList);
         return "book/bookReviewPage.html";
     }

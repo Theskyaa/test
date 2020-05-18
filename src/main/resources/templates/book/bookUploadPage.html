@@ -16,20 +16,31 @@
   <![endif]-->
 
   <script type="text/javascript">
-    function f1() {
-      $.ajax({
-        type: "POST",
-        url: "/bookUploadSuccess",
-        data: $('#bookInfo').serialize(),// 序列化表单值
-        async: false,
-        error: function (request) {
-          alert("Connection error");
-        },
-        success: function (data) {
-          alert("Book has been upload successfully!")
-          window.location.href = "/bookUpload";
-        }
-      });
+    function submitBook() {
+
+      var bookName=document.getElementById("bookName").value;
+      var bookAuthor=document.getElementById("bookAuthor").value;
+      var bookPublishingHouse=document.getElementById("bookPublishingHouse").value;
+      var bookScore=document.getElementById("bookScore").value;
+      var bookIntroduction =$("#textArea").val();
+      if (bookName==""||bookAuthor==""||bookScore==""||bookPublishingHouse==""||bookIntroduction==""){
+        alert("请输入完整的书籍信息！！！");
+        return false;
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "/bookUploadSuccess",
+          data: $('#bookInfo').serialize(),// 序列化表单值
+          async: false,
+          error: function (request) {
+            alert("Connection Error");
+          },
+          success: function (data) {
+            alert("Book has been upload successfully!")
+            window.location.href = "/bookUpload";
+          }
+        });
+      }
 
     }
   </script>
@@ -58,9 +69,9 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <form class="navbar-form navbar-left" action="/search" method="post">
+      <form class="navbar-form navbar-left" action="/searchBook" method="post">
         <div class="form-group">
-          <input type="text" class="form-control" name="searchMessage" placeholder="Search">
+          <input type="text" class="form-control" name="searchMessage" placeholder="BookName/BookAuthor">
         </div>
         <button type="submit" class="btn btn-default">Search</button>
       </form>
@@ -172,7 +183,7 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button id="uploadButton" type="button" onclick="f1()" class="btn btn-primary btn-lg">Upload</button>
+              <button id="uploadButton" type="button" onclick="submitBook()" class="btn btn-primary btn-lg">Upload</button>
             </div>
           </div>
         </form>

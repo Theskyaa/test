@@ -82,4 +82,11 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(nativeQuery = true,value = "update book set book_name=?2,book_author=?3,book_publishinghouse=?4,book_introduction=?5 where book_id=?1")
     void updateBookInfo(Integer bookId,String bookName,String bookAuthor,String publishingHouse,String bookIntroduction);
 
+
+
+    @Query(nativeQuery = true,value = "select * from book where book_name like concat('%',?1,'%') ")
+    List<Book> selectBookLikeBookName(String bookName);
+
+    @Query(nativeQuery = true,value = "select * from book where book_author like concat('%',?1,'%') ")
+    List<Book> selectBookLikeBookAuthor(String bookAuthor);
 }

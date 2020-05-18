@@ -6,6 +6,7 @@ import com.database.test.entity.User;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.BorrowRecordsRepository;
 import com.database.test.repository.UserRepository;
+import com.database.test.util.SubTextUtil;
 import com.database.test.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,13 +31,9 @@ public class BorrowBookController {
         //List<Book> bookList=bookRepository.listAll();
         Integer groupId= (Integer) session.getAttribute("currentGroupId");
         List<Book> bookList=bookRepository.listNotBorrowedBookByGroupId(groupId);
+        //将Book简介缩写成20字长度
+        new SubTextUtil().subBookIntroduction(bookList);
 
-        for (int i=0;i<bookList.size();i++){
-            Book book=bookList.get(i);
-            if (book.getBookIntroduction().length()>20){
-                book.setBookIntroduction(book.getBookIntroduction().substring(0,20));
-            }
-        }
         System.out.println(session.getAttribute("currentEmail"));
         model.addAttribute("list",bookList);
         return "book/bookBorrowPage.html";

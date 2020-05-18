@@ -126,18 +126,6 @@ public class GroupController {
     }
 
 
-    @RequestMapping(value = "/groupSearch",method = RequestMethod.POST)
-    public String groupSearch(@RequestParam("groupName")String groupName,
-                              HttpSession session,
-                              Model model){
-        String email= (String) session.getAttribute("currentEmail");
-        List<GroupList> groupLists=groupRepository.selectGroupLike(groupName,email);
-        model.addAttribute("groupList",groupLists);
-        return "group/groupJoinInPage.html";
-    }
-
-
-
     //小组管理
     @RequestMapping(value = "/groupManage",method = RequestMethod.GET)
     public String groupManage(HttpSession session,
