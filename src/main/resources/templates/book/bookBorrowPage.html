@@ -16,50 +16,62 @@
   <![endif]-->
 
   <script type="text/javascript">
-    window.onload=function () {
-      var all = document.getElementsByTagName("button");
-      var id
-      for (var i = 0; i < all.length; i++) {
-        all[i].onclick = function () {
-          var t = this.parentNode.parentNode;
-          id = t.cells[0].innerText;
-          var r = confirm("Are you sure to borrow this book？");
-          if (r == true) {
-            //x = "Yes！";
-            $.ajax({
-              type: "POST",
-              url: '/borrowBook',
-              data: {"bookId": id},
-              dataType: "json",
-              success: function (result) {
-                alert('Borrow Successful!');
-                location.reload();
-                window.parent.closeDialog('editUser');
-              }
-            });
-          } else {
-            //x = "No！";
+    
+    function borrowBook (event) {
+      var btn=event.srcElement;
+      var t=btn.parentNode.parentNode;
+      var bookId = t.cells[0].innerText;
+      var r = confirm("Are you sure to borrow this book？");
+      if (r == true) {
+        $.ajax({
+          type: "POST",
+          url: '/borrowBook',
+          data: {"bookId": bookId},
+          dataType: "json",
+          success: function (result) {
+            alert('Borrow Successful!');
+            location.reload();
+            window.parent.closeDialog('editUser');
           }
-        }
-      }
+        });
+      } else {
 
-      var allA = document.getElementsByTagName("a");
-      for (var i = 0; i < allA.length; i++) {
-        allA[i].onclick = function () {
-          var t = this.parentNode.parentNode;
-          id = t.cells[0].innerText;
-          $.ajax({
-            type: "POST",
-            url: '/bookId',
-            data: {"bookId": id},
-            dataType: "json",
-            success: function (result) {
-              window.location.href="/bookDetail";
-              window.parent.closeDialog('editUser');
-            }
-          });
-        }
       }
+    }
+    
+    
+    function getBookDetail(event) {
+      var a=event.srcElement;
+      var t=a.parentNode.parentNode;
+      var bookId = t.cells[0].innerText;
+      $.ajax({
+        type: "POST",
+        url: '/bookId',
+        data: {"bookId": bookId},
+        dataType: "json",
+        success: function (result) {
+          window.location.href="/bookDetail";
+          window.parent.closeDialog('editUser');
+        }
+      });
+    }
+    
+    
+    function getOwnerInfo(event) {
+      var a=event.srcElement;
+      var t=a.parentNode.parentNode;
+      var bookId = t.cells[0].innerText;
+      $.ajax({
+        type: "POST",
+        url: '/setBookId',
+        data: {"bookId": bookId},
+        dataType: "json",
+        success: function (result) {
+          window.location.href="/ownerInfo";
+          window.parent.closeDialog('editUser');
+        }
+      });
+
     }
   </script>
 
@@ -146,7 +158,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://getbootstrap.com/docs/4.1/examples/dashboard/#">
+            <a class="nav-link" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
               兴趣分享
             </a>
@@ -176,11 +188,11 @@
             <tr th:each="list : ${list}">
               <td th:text="${list.getBookId()}"></td>
               <td th:text="${list.getBookName()}"></td>
-              <td th:text="${list.getBookAuthor()}">null</td>
-              <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookIntroduction()}">null</td>
-              <td><a href="#">Detail</a></td>
-              <td><button class="btn btn-lg btn-primary btn-block" type="submit">borrow</button></td>
+              <td th:text="${list.getBookAuthor()}"></td>
+              <td><a href="#" onclick="getOwnerInfo(event)" th:text="${list.getBookOwner()}"></a></td>
+              <td th:text="${list.getBookIntroduction()}"></td>
+              <td><a href="#" onclick="getBookDetail(event)">Detail</a></td>
+              <td><button class="btn btn-lg btn-primary btn-block" type="button" onclick="borrowBook(event)">borrow</button></td>
             </tr>
           </tbody>
         </table>

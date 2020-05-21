@@ -15,6 +15,35 @@
   <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
   <![endif]-->
 
+  <script type="text/javascript">
+    function subCommit() {
+      var userEmail=document.getElementById("inputEmail").value;
+      var userName=document.getElementById("inputName").value;
+      var userGender=document.getElementById("inputGender").value;
+      var userQQ=document.getElementById("inputQQ").value;
+      var userTel=document.getElementById("inputTel").value;
+      var userIntroduction =$("#inputIntroduction").val();
+      if (userName==""||userName==""||userGender==""||userTel==""||userQQ==""||userIntroduction==""){
+        alert("请完善个人信息!!!!!");
+        return false;
+      }else {
+        $.ajax({
+          type: "POST",
+          url: "/userInfoChange",
+          data: {"userEmail":userEmail,"userName":userName,"userGender":userGender,"userQQ":userQQ,"userTel":userTel,"userIntroduction":userIntroduction},
+          async: false,
+          error: function (request) {
+            alert("Connection Error");
+          },
+          success: function (data) {
+            alert("Modify Success!");
+            window.location.href = "/userInfo";
+          }
+        });
+      }
+    }
+  </script>
+
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -27,7 +56,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/mainMenu">UserInfo</a>
+      <a class="navbar-brand" href="/groupMenu">UserInfo</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -71,35 +100,39 @@
         <div class="form-group">
           <label for="inputName" class="col-sm-2 control-label">Name</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userName}" class="form-control" id="inputName" readonly>
+            <input type="text" th:value="${userName}" class="form-control" id="inputName">
           </div>
         </div>
         <div class="form-group">
           <label for="inputGender" class="col-sm-2 control-label">Gender</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userGender}" class="form-control" id="inputGender" readonly>
+            <input type="text" th:value="${userGender}" class="form-control" id="inputGender">
           </div>
         </div>
         <div class="form-group">
           <label for="inputTel" class="col-sm-2 control-label">Tel</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userTel}" class="form-control" id="inputTel" readonly>
+            <input type="text" th:value="${userTel}" class="form-control" id="inputTel">
           </div>
         </div>
         <div class="form-group">
           <label for="inputQQ" class="col-sm-2 control-label">QQ</label>
           <div class="col-sm-7">
-            <input type="text" th:value="${userQQ}" class="form-control" id="inputQQ" readonly>
+            <input type="text" th:value="${userQQ}" class="form-control" id="inputQQ">
           </div>
         </div>
         <div class="form-group">
           <label for="inputIntroduction" class="col-sm-2 control-label">Introduction</label>
           <div class="col-sm-7">
-            <textarea class="form-control" th:text="${userIntroduction}" id="inputIntroduction" rows="6" readonly></textarea>
+            <textarea class="form-control" th:text="${userIntroduction}" id="inputIntroduction" rows="6"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-5">
+            <button id="subButton" type="button" onclick="subCommit()" class="btn btn-success btn-lg">Modify</button>
           </div>
         </div>
       </form>
-
 
     </main>
   </div>

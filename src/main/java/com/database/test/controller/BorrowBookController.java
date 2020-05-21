@@ -2,10 +2,8 @@ package com.database.test.controller;
 
 import com.database.test.entity.Book;
 import com.database.test.entity.BorrowRecords;
-import com.database.test.entity.User;
 import com.database.test.repository.BookRepository;
 import com.database.test.repository.BorrowRecordsRepository;
-import com.database.test.repository.UserRepository;
 import com.database.test.util.SubTextUtil;
 import com.database.test.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +44,9 @@ public class BorrowBookController {
                               HttpSession session){
         String email= (String) session.getAttribute("currentEmail");
         int result=bookRepository.updateBookReadingByBookId(bookId,email);
-        List<BorrowRecords> records=borrowRecordsRepository.selectMaxRecordId();
 
+
+        List<BorrowRecords> records=borrowRecordsRepository.selectMaxRecordId();
         //生成借阅record
         int maxId=0;
         if (records.size()==0){

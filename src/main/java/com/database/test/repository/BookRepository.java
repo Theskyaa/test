@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import javax.transaction.Transactional;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public interface BookRepository extends JpaRepository<Book,String> {
 
@@ -66,13 +64,11 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(nativeQuery = true,value = "delete from bookbelong where book_id=?1 and group_id=?2")
     void deleteBookBelongByBookIdAndGroupId(Integer bookID,Integer groupId);
 
-
     //直接删除了书库中的所有书，未考虑到借出未归还的情况，可能在生成借阅记录的时候会出现一些问题
     @Transactional
     @Modifying
     @Query(nativeQuery = true,value = "delete from book where book_id in (select book_id from bookbelong where group_id=?1)")
     void deleteByGroupIdFromBookAndBookBelong(Integer groupId);
-
 
     @Query(nativeQuery = true,value = "select book.book_id, book_name, book_author, book_owner, book_reading, book_publishinghouse, book_score, book_introduction from book,bookbelong where group_id=?1 and book.book_id=bookbelong.book_id")
     List<Book> selectBookByGroupId(Integer groupId);
@@ -82,11 +78,12 @@ public interface BookRepository extends JpaRepository<Book,String> {
     @Query(nativeQuery = true,value = "update book set book_name=?2,book_author=?3,book_publishinghouse=?4,book_introduction=?5 where book_id=?1")
     void updateBookInfo(Integer bookId,String bookName,String bookAuthor,String publishingHouse,String bookIntroduction);
 
-
-
     @Query(nativeQuery = true,value = "select * from book where book_name like concat('%',?1,'%') ")
     List<Book> selectBookLikeBookName(String bookName);
 
     @Query(nativeQuery = true,value = "select * from book where book_author like concat('%',?1,'%') ")
     List<Book> selectBookLikeBookAuthor(String bookAuthor);
+
+    @Query(nativeQuery = true,value = "select book_owner from book where book_id=?1")
+    String selectEmailFromBookByBookId(Integer bookId);
 }
