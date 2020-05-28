@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -48,22 +49,27 @@ public class UserController {
     @RequestMapping(value = "/loginSuccess",method = RequestMethod.POST)
     public String loginSuccess(@RequestParam("email")String email,
                                @RequestParam("password")String password,
+                               Map<String,String> map,
                                Model model,
                                HttpSession session
                                /*HttpServletRequest request,
                                HttpServletResponse response*/){
         List<User> users=userRepository.selectByEmail(email);
         if (users.size()==0){
-            return "redirect:/login";
+            map.put("msg","Email or Password is wrong!");
+            //return "redirect:/login";
+            return "user/login.html";
         }else {
             if (users.get(0).getPassword().equals(password)){
                 session.setAttribute("currentEmail",email);
                 session.setAttribute("currentUsername",users.get(0).getUsername());
                 System.out.println("success");
                 return "redirect:/groupMenu";
+            }else {
+                map.put("msg","Email or Password is wrong!");
+                return "user/login.html";
             }
         }
-        return "redirect:/login";
     }
 
 
@@ -75,13 +81,15 @@ public class UserController {
                            @RequestParam("gender")String gender,
                            @RequestParam("QQ")String QQ,
                            @RequestParam("userTel")String Tel,
-                           @RequestParam("introduction")String introduction){
+                           @RequestParam("introduction")String introduction,
+                           Map<String,String>map){
 
         List<User> users=userRepository.selectByEmail(email);
         if (users.size()==0){
             userRepository.insertUser(email,username,password,gender,QQ,Tel,introduction);
             return "redirect:/login";
         }else {
+            map.put("msg","Email was registered!");
             return "user/register.html";
         }
     }

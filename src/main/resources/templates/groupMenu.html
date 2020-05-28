@@ -110,21 +110,21 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner" role="listbox">
           <div class="item active my-img">
-            <img src="../static/img/image6.jpg" th:src="@{/img/image4.png}">
+            <img src="../static/img/image11.jpg" th:src="@{/img/image11.jpg}">
             <div class="carousel-caption">
-              111
+
             </div>
           </div>
           <div class="item my-img">
-            <img src="../static/img/image4.png" th:src="@{/img/image6.jpg}">
+            <img src="../static/img/image6.jpg" th:src="@{/img/image6.jpg}">
             <div class="carousel-caption">
-              222
+
             </div>
           </div>
           <div class="item my-img">
             <img src="../static/img/image3.jpg" th:src="@{/img/image3.jpg}">
             <div class="carousel-caption">
-              333
+
             </div>
           </div>
         </div>
@@ -139,34 +139,7 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
-      <!--<div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-          <tr>
-            <th>index_id</th>
-            <th>book_name</th>
-            <th>book_author</th>
-            <th>book_owner</th>
-            <th>book_currentReading</th>
-            <th>borrow_books</th>
-          </tr>
-          </thead>
 
-          <tbody>
-          <form action="/sendBook" method="post">
-            <tr th:each="list : ${list1}">
-              <td th:text="${list.getBookId()}"></td>
-              <td th:text="${list.getBookName()}"></td>
-              &lt;!&ndash;<td><a href="#" th:text="${list.getBookName()}">Title</a></td>&ndash;&gt;
-              <td th:text="${list.getBookAuthor()}">null</td>
-              <td th:text="${list.getBookOwner()}">null</td>
-              <td th:text="${list.getBookCurrentReading()}">null</td>
-              <td><button class="btn btn-lg btn-primary btn-block" type="submit">borrow</button></td>
-            </tr>
-          </form>
-          </tbody>
-        </table>
-      </div>-->
     </main>
   </div>
 </div>
